@@ -44,36 +44,7 @@ function LandingPage() {
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .animate-marquee { animation: marquee 20s linear infinite; }
 
-        /* Horizontal scroll snap for product rows on mobile */
-        .cards-scroll {
-          display: flex;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-          scrollbar-width: none;
-          gap: 12px;
-          padding: 12px 20px 20px;
-        }
-        .cards-scroll::-webkit-scrollbar { display: none; }
-        .cards-scroll > * {
-          scroll-snap-align: start;
-          flex-shrink: 0;
-          width: 52vw;
-          max-width: 200px;
-        }
 
-        /* On md+ let cards-scroll be a normal grid (Products component handles its own layout) */
-        @media (min-width: 768px) {
-          .cards-scroll {
-            display: block;
-            overflow-x: visible;
-            padding: 0;
-          }
-          .cards-scroll > * {
-            width: auto;
-            max-width: none;
-          }
-        }
       `}</style>
 
 
@@ -233,10 +204,7 @@ function LandingPage() {
           </div>
           <button onClick={() => navigate("/men")} className="rounded-full border border-[#2c2c2c] px-4 py-2 text-[9px] uppercase tracking-widest text-[#2c2c2c] whitespace-nowrap">View All</button>
         </div>
-        {/* Wrap cards in a mobile scroll container */}
-        <div className="cards-scroll">
-          <MenCards />
-        </div>
+        <MenCards />
       </section>
 
       {/* ── 6. WOMEN'S PRODUCTS ── */}
@@ -248,9 +216,7 @@ function LandingPage() {
           </div>
           <button onClick={() => navigate("/women")} className="rounded-full border border-[#2c2c2c] px-4 py-2 text-[9px] uppercase tracking-widest text-[#2c2c2c] whitespace-nowrap">View All</button>
         </div>
-        <div className="cards-scroll">
-          <WomenCards />
-        </div>
+        <WomenCards />
       </section>
 
       {/* ── 7. UNISEX PRODUCTS ── */}
@@ -262,9 +228,7 @@ function LandingPage() {
           </div>
           <button onClick={() => navigate("/unisex")} className="rounded-full border border-[#2c2c2c] px-4 py-2 text-[9px] uppercase tracking-widest text-[#2c2c2c] whitespace-nowrap">View All</button>
         </div>
-        <div className="cards-scroll">
-          <UnisexCards />
-        </div>
+        <UnisexCards />
       </section>
 
       {/* ── 8. FEATURED DROPS ── */}
