@@ -1,1 +1,70 @@
 @import "tailwindcss";
+
+.volente-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 8px 12px 18px;
+  align-items: start;
+}
+
+@media (min-width: 580px) {
+  .volente-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 10px 16px 28px;
+  }
+}
+
+@media (min-width: 900px) {
+  .volente-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    padding: 14px 20px 36px;
+  }
+}
+
+.volente-grid > div {
+  transition: transform 0.12s ease;
+}
+
+.volente-grid > div:active {
+  transform: scale(0.96);
+}
+
+/* Modal Animations */
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes modal-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes modal-slide-down {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+.animate-modal-fade-in {
+  animation: modal-fade-in 0.25s ease-out forwards;
+}
+
+.animate-modal-fade-out {
+  animation: modal-fade-out 0.2s ease-in forwards;
+}
+
+.animate-modal-slide-up {
+  animation: modal-slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-slide-down {
+  animation: modal-slide-down 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
+}

@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBag, Trash2, Send, Minus, Plus } from "lucide-react";
+import { ShoppingBag, Trash2, Send, Minus, Plus, Check } from "lucide-react";
+import axios from "axios";
 
 
 // ── Config ───────────────────────────────────────────────
 const ADMIN_WHATSAPP = "919207388631"; // Format: 91XXXXXXXXXX
-const SHOP_NAME      = "Volente";
-const SHOP_ADDRESS   = "Near New Bus Stand, Manjeri";
-const SHOP_PHONE     = "+91 8891163878";
-const SHOP_WA        = "919207388631"; // Admin WA for customer to contact
+const SHOP_NAME = "Volente";
+const SHOP_ADDRESS = "Near New Bus Stand, Manjeri";
+const SHOP_PHONE = "+91 8891163878";
+const SHOP_WA = "919207388631"; // Admin WA for customer to contact
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // ── Cart helpers ─────────────────────────────────────────
 const CART_KEY = "volente_cart";
@@ -23,17 +25,12 @@ const saveCart = (cart) => {
   window.dispatchEvent(new Event("cartUpdated"));
 };
 
-// ── Generate short order ID ───────────────────────────────
-const generateOrderId = () => {
-  const now = Date.now();
-  return "VLT" + now.toString(36).toUpperCase().slice(-6);
-};
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const [cart,    setCart]    = useState(getCart);
-  const [form,    setForm]    = useState({ name: "", phone: "", address: "", pincode: "" });
-  const [errors,  setErrors]  = useState({});
+  const [cart, setCart] = useState(getCart);
+  const [form, setForm] = useState({ name: "", phone: "", address: "", pincode: "" });
+  const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -61,12 +58,12 @@ export default function Checkout() {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim())    e.name    = "Name is required";
+    if (!form.name.trim()) e.name = "Name is required";
     if (!form.phone.trim() || !/^\d{10}$/.test(form.phone.trim()))
-                              e.phone   = "Enter valid 10-digit number";
+      e.phone = "Enter valid 10-digit number";
     if (!form.address.trim()) e.address = "Address is required";
     if (!form.pincode.trim() || !/^\d{6}$/.test(form.pincode.trim()))
-                              e.pincode = "Enter valid 6-digit pincode";
+      e.pincode = "Enter valid 6-digit pincode";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -141,36 +138,54 @@ export default function Checkout() {
   };
 
   // ── Place Order ───────────────────────────────────────────
-  const handleOrder = () => {
-    if (!validate() || cart.length === 0) return;
+ const handleOrder = async () => {
+  if (!validate() || cart.length === 0) return;
 
-    setSending(true);
-    const orderId = generateOrderId();
+  setSending(true);
 
-    const itemLines = cart
-      .map((item) =>
-        `• ${item.name}${item.selectedSize ? ` (${item.selectedSize})` : ""} ×${item.qty || 1} = Rs.${(Number(item.price) * (item.qty || 1)).toLocaleString("en-IN")}`
-      )
-      .join("\n");
+  try {
+    const orderData = {
+      customer: {
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        pincode: form.pincode,
+      },
+      items: cart.map((item) => ({
+        productId: item._id,
+        name: item.name,
+        selectedSize: item.selectedSize,
+        price: Number(item.price),
+        qty: item.qty || 1,
+      })),
+      totalAmount: total,
+    };
 
-    // Step 1: Open WhatsApp to ADMIN
-    const adminUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${buildAdminMessage(orderId, itemLines)}`;
-    window.open(adminUrl, "_blank");
+    const res = await axios.post(`${API_URL}/orders`, orderData);
 
-    // Step 2: After brief delay, open WhatsApp receipt TO CUSTOMER (self-send on their number)
-    setTimeout(() => {
-      const customerUrl = `https://wa.me/91${form.phone}?text=${buildCustomerMessage(orderId, itemLines)}`;
-      window.open(customerUrl, "_blank");
-    }, 1200);
+    const savedOrder = res.data?.data;
 
-    // Step 3: Clear cart and navigate to success
-    setTimeout(() => {
-      saveCart([]);
-      setCart([]);
-      setSending(false);
-      navigate("/order-success", { state: { orderId, customerName: form.name } });
-    }, 2000);
-  };
+    if (!savedOrder?.orderId) {
+      alert("Order saved, but order ID not received.");
+      return;
+    }
+
+    saveCart([]);
+    setCart([]);
+
+    navigate("/order-success", {
+      state: {
+        order: savedOrder,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to place order:", err);
+    alert(err.response?.data?.message || "Failed to place order. Please try again.");
+  } finally {
+    setSending(false);
+  }
+};
+
 
   return (
     <>
@@ -412,7 +427,7 @@ export default function Checkout() {
                       Sending Order…
                     </span>
                   ) : (
-                    <><Send className="h-4 w-4" /> Place Order via WhatsApp</>
+                    <><Send className="h-4 w-4" /> Place Order</>
                   )}
                 </button>
               </div>

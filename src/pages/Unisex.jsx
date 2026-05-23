@@ -55,7 +55,6 @@ function Unisex() {
         }
         .unisex-pill:hover { background: #2c2c2c; border-color: #2c2c2c; color: #fff; }
 
-        /* Stats — 4 equal columns, never overflow */
         .unisex-stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -76,7 +75,6 @@ function Unisex() {
         }
         .badge-new { animation: badge-pulse 2.5s ease infinite; }
 
-        /* Diamonds clipped inside overflow-hidden */
         .geo-diamond {
           position: absolute;
           border: 1px solid rgba(201,185,154,0.06);
@@ -84,7 +82,6 @@ function Unisex() {
           pointer-events: none;
         }
 
-        /* Hide filter scrollbar */
         .filter-bar::-webkit-scrollbar { display: none; }
         .filter-bar { scrollbar-width: none; }
       `}</style>
@@ -94,12 +91,10 @@ function Unisex() {
         className="unisex-hero-bg unisex-grain relative flex flex-col items-center justify-center text-center overflow-hidden"
         style={{ minHeight: "100svh", padding: "64px 20px 0" }}
       >
-        {/* Decorative diamonds — clipped by overflow-hidden */}
         <div className="geo-diamond" style={{ width: 240, height: 240, top: "6%",  left: "-6%"  }} />
         <div className="geo-diamond" style={{ width: 160, height: 160, top: "55%", right: "-5%" }} />
         <div className="geo-diamond" style={{ width: 110, height: 110, bottom: "14%", left: "34%" }} />
 
-        {/* Giant bg word — clipped, never causes horizontal scroll */}
         <span
           aria-hidden="true"
           className="absolute inset-0 flex items-center justify-center font-light uppercase text-white/[0.025] select-none pointer-events-none leading-none z-0"
@@ -108,10 +103,7 @@ function Unisex() {
           Unisex
         </span>
 
-        {/* Main content */}
         <div className="relative z-10 flex flex-col items-center w-full" style={{ maxWidth: 360 }}>
-
-          {/* Breadcrumb */}
           <div ref={breadcrumbRef} className="flex items-center gap-2 mb-6">
             <button
               onClick={() => navigate("/")}
@@ -125,20 +117,13 @@ function Unisex() {
             </span>
           </div>
 
-          {/* New badge */}
           <div className="badge-new mb-5">
-            <span
-              style={{ border: "1px solid rgba(201,185,154,0.5)", color: "#c9b99a", fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", padding: "6px 16px", borderRadius: 999 }}
-            >
+            <span style={{ border: "1px solid rgba(201,185,154,0.5)", color: "#c9b99a", fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", padding: "6px 16px", borderRadius: 999 }}>
               ✦ New Collection
             </span>
           </div>
 
-          {/* Animated vertical line */}
-          <span
-            ref={lineRef}
-            style={{ display: "block", width: 1, height: 55, background: "linear-gradient(to bottom, transparent, #c9b99a, transparent)", margin: "0 auto 14px" }}
-          />
+          <span ref={lineRef} style={{ display: "block", width: 1, height: 55, background: "linear-gradient(to bottom, transparent, #c9b99a, transparent)", margin: "0 auto 14px" }} />
 
           <p style={{ fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase", color: "#c9b99a", marginBottom: 12 }}>
             For Everyone — 2026
@@ -170,7 +155,6 @@ function Unisex() {
           </button>
         </div>
 
-        {/* Stats bar — pinned bottom, grid layout prevents overflow */}
         <div className="relative z-10 w-full mt-auto" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           <div className="unisex-stats-grid" style={{ padding: "14px 8px" }}>
             {[
@@ -225,9 +209,7 @@ function Unisex() {
       <UnisexCards />
 
       {/* ── COLLECTION STORY ── */}
-      <section
-        style={{ background: "linear-gradient(135deg, #1c1c22 0%, #2c2a1e 100%)", padding: "60px 20px", textAlign: "center", overflow: "hidden", fontFamily: "Barlow, sans-serif" }}
-      >
+      <section style={{ background: "linear-gradient(135deg, #1c1c22 0%, #2c2a1e 100%)", padding: "60px 20px", textAlign: "center", overflow: "hidden", fontFamily: "Barlow, sans-serif" }}>
         <p style={{ fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase", color: "#c9b99a", marginBottom: 18 }}>The Unisex Philosophy</p>
         <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 5.5vw, 42px)", fontWeight: 300, color: "#fff", lineHeight: 1.6, maxWidth: 520, margin: "0 auto 24px" }}>
           "Scent has no gender. Only intention."
@@ -252,7 +234,8 @@ function Unisex() {
         <p style={{ textAlign: "center", fontSize: 9, letterSpacing: "0.35em", textTransform: "uppercase", color: "#a89880", marginBottom: 20 }}>Explore More</p>
         <div style={{ display: "flex", gap: 12, maxWidth: 500, margin: "0 auto" }}>
           {[
-            { label: "Men",   path: "/men",   img: "https://www.frenchessence.com/cdn/shop/files/6_082874df-845a-4503-889e-6c5a5a7e5151.jpg?v=1758783179&width=1946" },
+            // ✅ CLIENT IMAGE: dark 8ml bottles for Men cross-nav
+            { label: "Men",   path: "/men",   img: "/Lp8ml2.jpeg" },
             { label: "Women", path: "/women", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop" },
           ].map(({ label, path, img }) => (
             <div

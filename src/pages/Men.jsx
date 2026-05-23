@@ -54,7 +54,6 @@ function Men() {
         }
         .men-pill:hover { background: #2c2c2c; border-color: #2c2c2c; color: #fff; }
 
-        /* Stats — 4 equal columns */
         .men-stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -80,11 +79,9 @@ function Men() {
         className="men-hero-bg men-grain relative flex flex-col items-center justify-center text-center overflow-hidden"
         style={{ minHeight: "100svh", padding: "64px 20px 0" }}
       >
-        {/* Decorative rings — overflow-hidden clips them safely */}
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 440, height: 440, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.04)", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 300, height: 300, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.03)", pointerEvents: "none", zIndex: 0 }} />
 
-        {/* Giant bg word */}
         <span
           aria-hidden="true"
           className="absolute inset-0 flex items-center justify-center font-light uppercase text-white/[0.025] select-none pointer-events-none leading-none z-0"
@@ -93,10 +90,7 @@ function Men() {
           Men
         </span>
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col items-center w-full" style={{ maxWidth: 360 }}>
-
-          {/* Breadcrumb */}
           <div ref={breadcrumbRef} className="flex items-center gap-2 mb-6">
             <button
               onClick={() => navigate("/")}
@@ -110,7 +104,6 @@ function Men() {
             </span>
           </div>
 
-          {/* Vertical line */}
           <span style={{ display: "block", width: 1, height: 60, background: "linear-gradient(to bottom, transparent, #a89880, transparent)", margin: "0 auto 14px" }} />
 
           <p style={{ fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase", color: "#a89880", marginBottom: 12 }}>
@@ -143,7 +136,6 @@ function Men() {
           </button>
         </div>
 
-        {/* Stats bar */}
         <div className="relative z-10 w-full mt-auto" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           <div className="men-stats-grid" style={{ padding: "14px 8px" }}>
             {[
@@ -198,9 +190,7 @@ function Men() {
       <MenCards />
 
       {/* ── COLLECTION STORY ── */}
-      <section
-        style={{ background: "linear-gradient(135deg, #1a2028 0%, #2c3a30 100%)", padding: "60px 20px", textAlign: "center", overflow: "hidden" }}
-      >
+      <section style={{ background: "linear-gradient(135deg, #1a2028 0%, #2c3a30 100%)", padding: "60px 20px", textAlign: "center", overflow: "hidden" }}>
         <p style={{ fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase", color: "#a89880", marginBottom: 18 }}>The Men's Story</p>
         <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 5.5vw, 42px)", fontWeight: 300, color: "#fff", lineHeight: 1.6, maxWidth: 520, margin: "0 auto 24px" }}>
           "Strength has a scent. Make it yours."
@@ -225,8 +215,9 @@ function Men() {
         <p style={{ textAlign: "center", fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.35em", textTransform: "uppercase", color: "#a89880", marginBottom: 20 }}>Explore More</p>
         <div style={{ display: "flex", gap: 12, maxWidth: 500, margin: "0 auto" }}>
           {[
-            { label: "Women", path: "/women",       img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop" },
-            { label: "Unisex", path: "/unisex", img: "https://lafrenchperfumes.com/cdn/shop/files/bespoke-perfume-scent-for-men-30-ml-404048_53b2ed6d-be5b-4c53-942a-169fe8f864f8.jpg?v=1725281821" },
+            { label: "Women", path: "/women", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop" },
+            // ✅ CLIENT IMAGE: coloured 8ml bottles for Unisex cross-nav
+            { label: "Unisex", path: "/unisex", img: "/Lp8ml.jpeg" },
           ].map(({ label, path, img }) => (
             <div
               key={label}
