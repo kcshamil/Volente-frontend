@@ -10,6 +10,7 @@ import {
   Edit2,
   LogOut,
   X,
+  Image,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -285,6 +286,12 @@ export default function AdminProducts() {
           >
             <ShoppingBag size={18} /> All Orders
           </Link>
+          <Link
+            to="/admin/site-content"
+            className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm transition-colors"
+          >
+            <Image size={18} /> Site Images
+          </Link>
         </nav>
 
         <button
@@ -475,34 +482,34 @@ export default function AdminProducts() {
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-  <label className="text-[10px] uppercase tracking-widest text-[#7a6e65]">
-    Available Sizes / ML
-  </label>
+                  <label className="text-[10px] uppercase tracking-widest text-[#7a6e65]">
+                    Available Sizes / ML
+                  </label>
 
-  <input
-    type="text"
-    inputMode="text"
-    placeholder="Example: 8ml, 30ml, 100ml"
-    className="w-full border border-[#ede7df] rounded-xl px-4 py-3 text-sm"
-    value={formData.sizesText || ""}
-    onChange={(e) => {
-      const text = e.target.value;
+                  <input
+                    type="text"
+                    inputMode="text"
+                    placeholder="Example: 8ml, 30ml, 100ml"
+                    className="w-full border border-[#ede7df] rounded-xl px-4 py-3 text-sm"
+                    value={formData.sizesText || ""}
+                    onChange={(e) => {
+                      const text = e.target.value;
 
-      setFormData({
-        ...formData,
-        sizesText: text,
-        sizes: text
-          .split(",")
-          .map((s) => s.trim())
-          .filter((s) => s !== ""),
-      });
-    }}
-  />
+                      setFormData({
+                        ...formData,
+                        sizesText: text,
+                        sizes: text
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter((s) => s !== ""),
+                      });
+                    }}
+                  />
 
-  <p className="text-[10px] text-[#a89880]">
-    Separate sizes using comma
-  </p>
-</div>
+                  <p className="text-[10px] text-[#a89880]">
+                    Separate sizes using comma
+                  </p>
+                </div>
 
                 <div className="space-y-4 md:col-span-2 bg-[#fcf8f3] border border-[#eadfce] rounded-2xl p-5">
                   <h3 className="text-xs uppercase tracking-widest text-[#7a6e65]">
@@ -619,8 +626,8 @@ export default function AdminProducts() {
                   {uploadingImage
                     ? "Uploading Image..."
                     : editingProduct
-                    ? "Update Product"
-                    : "Save Product"}
+                      ? "Update Product"
+                      : "Save Product"}
                 </button>
               </form>
             </div>

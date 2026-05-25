@@ -41,8 +41,7 @@ export default function OrderSuccess() {
     order?.items
       ?.map(
         (item) =>
-          `• ${item.name}${item.selectedSize ? ` (${item.selectedSize})` : ""} ×${
-            item.qty || 1
+          `• ${item.name}${item.selectedSize ? ` (${item.selectedSize})` : ""} ×${item.qty || 1
           } = Rs.${Number((item.price || 0) * (item.qty || 1)).toLocaleString(
             "en-IN"
           )}`
@@ -51,25 +50,23 @@ export default function OrderSuccess() {
 
   const customerReceiptUrl = order
     ? `https://wa.me/91${order.customer?.phone}?text=${encodeURIComponent(
-        `🛍️ *Order Placed — ${SHOP_NAME}*\n` +
-          `──────────────────────────────\n` +
-          `Hi ${order.customer?.name || "Customer"}! Your order has been placed.\n\n` +
-          `🆔 Order ID: *#${order.orderId}*\n` +
-          `──────────────────────────────\n` +
-          `🧾 *Your Items:*\n\n` +
-          `${itemLines}\n` +
-          `──────────────────────────────\n` +
-          `💰 *Total: Rs. ${Number(order.totalAmount || 0).toLocaleString(
-            "en-IN"
-          )}*\n\n` +
-          `📍 Deliver to: ${order.customer?.address || ""}, ${
-            order.customer?.pincode || ""
-          }\n` +
-          `──────────────────────────────\n` +
-          `Our team will confirm your order shortly.\n\n` +
-          `📞 For queries: ${SHOP_PHONE}\n` +
-          `Thank you for shopping with us! 🙏`
-      )}`
+      `Order Placed - ${SHOP_NAME}\n` +
+      `------------------------------\n` +
+      `Hi ${order.customer?.name || "Customer"}, your order has been placed.\n\n` +
+      `Order ID: #${order.orderId}\n` +
+      `------------------------------\n` +
+      `Your Items:\n\n` +
+      `${itemLines}\n` +
+      `------------------------------\n` +
+      `Total: Rs. ${Number(order.totalAmount || 0).toLocaleString("en-IN")}\n\n` +
+      `Deliver to: ${order.customer?.address || ""}, ${order.customer?.city || ""
+      }, ${order.customer?.district || ""} - ${order.customer?.pincode || ""
+      }\n` +
+      `------------------------------\n` +
+      `Your order is currently Pending. Our team will confirm it shortly.\n\n` +
+      `For queries: ${SHOP_PHONE}\n` +
+      `Thank you for shopping with us.`
+    )}`
     : "#";
 
   const waStatusUrl = `https://wa.me/${SHOP_WA}?text=${encodeURIComponent(
@@ -233,25 +230,23 @@ export default function OrderSuccess() {
 function Step({ icon, label, desc, done = false, active = false }) {
   return (
     <div
-      className={`flex items-start gap-3 px-4 py-3 rounded-xl ${
-        done
-          ? "bg-green-50 border border-green-100"
-          : active
+      className={`flex items-start gap-3 px-4 py-3 rounded-xl ${done
+        ? "bg-green-50 border border-green-100"
+        : active
           ? "bg-[#f5f0eb] border border-[#e0d8d0]"
           : "opacity-50"
-      }`}
+        }`}
     >
       <span className="text-base mt-0.5 shrink-0">{icon}</span>
 
       <div>
         <p
-          className={`text-[12px] font-medium ${
-            done
-              ? "text-green-700"
-              : active
+          className={`text-[12px] font-medium ${done
+            ? "text-green-700"
+            : active
               ? "text-[#2c2c2c]"
               : "text-[#a89880]"
-          }`}
+            }`}
         >
           {label}
 

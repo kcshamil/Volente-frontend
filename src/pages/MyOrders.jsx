@@ -154,6 +154,38 @@ export default function MyOrders() {
                     ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
                   </p>
                 </div>
+                <div className="mt-5 pt-4 border-t border-[#ede7df]">
+                  <p className="text-[10px] uppercase tracking-widest text-[#a89880] mb-3">
+                    Delivery Details
+                  </p>
+
+                  <div className="space-y-2 text-sm">
+                    <p className="text-[#2c2c2c]">
+                      <strong>Name:</strong> {order.customer?.name || "N/A"}
+                    </p>
+
+                    <p className="text-[#2c2c2c]">
+                      <strong>Phone:</strong> +91 {order.customer?.phone || "N/A"}
+                    </p>
+
+                    <p className="text-[#2c2c2c] leading-relaxed">
+                      <strong>Address:</strong> {order.customer?.address || "N/A"}
+                    </p>
+
+                    <p className="text-[#2c2c2c]">
+                      <strong>Location:</strong>{" "}
+                      {order.customer?.city || "N/A"}
+                      {order.customer?.district
+                        ? `, ${order.customer.district}`
+                        : ""}
+                    </p>
+
+                    <p className="text-[#2c2c2c]">
+                      <strong>Pincode:</strong>{" "}
+                      {order.customer?.pincode || "N/A"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

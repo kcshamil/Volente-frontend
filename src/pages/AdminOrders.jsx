@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Package, ShoppingBag, LogOut, ExternalLink } from "lucide-react";
+import {
+  Package,
+  ShoppingBag,
+  LogOut,
+  ExternalLink,
+  Image,
+} from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -62,6 +68,36 @@ export default function AdminOrders() {
     }
   };
 
+  const sendWhatsAppUpdate = (order) => {
+    const phone = order.customer?.phone;
+
+    if (!phone) {
+      alert("Customer phone number not found");
+      return;
+    }
+
+    const message = `
+        Hello ${order.customer?.name || "Customer"},
+
+        Your Volente order has been updated.
+
+        [ORDER ID] ${order.orderId}
+        [STATUS] ${order.status}
+        [TOTAL] Rs.${Number(order.totalAmount || 0).toLocaleString("en-IN")}
+
+        You can track your order anytime from My Orders.
+
+        Thank you for shopping with Volente.
+
+        - Team Volente
+`;
+
+    window.open(
+      `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f5f0eb] flex items-center justify-center">
@@ -100,6 +136,12 @@ export default function AdminOrders() {
             className="flex items-center gap-3 p-3 bg-white/10 rounded-xl text-sm"
           >
             <ShoppingBag size={18} /> All Orders
+          </Link>
+          <Link
+            to="/admin/site-content"
+            className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm transition-colors"
+          >
+            <Image size={18} /> Site Images
           </Link>
         </nav>
 
@@ -144,15 +186,14 @@ export default function AdminOrders() {
                   </span>
 
                   <span
-                    className={`px-3 py-1 rounded-full text-[9px] uppercase tracking-widest ${
-                      order.status === "Pending"
-                        ? "bg-orange-100 text-orange-600"
-                        : order.status === "Confirmed"
+                    className={`px-3 py-1 rounded-full text-[9px] uppercase tracking-widest ${order.status === "Pending"
+                      ? "bg-orange-100 text-orange-600"
+                      : order.status === "Confirmed"
                         ? "bg-blue-100 text-blue-600"
                         : order.status === "Cancelled"
-                        ? "bg-red-100 text-red-600"
-                        : "bg-green-100 text-green-600"
-                    }`}
+                          ? "bg-red-100 text-red-600"
+                          : "bg-green-100 text-green-600"
+                      }`}
                   >
                     {order.status || "Pending"}
                   </span>
@@ -171,14 +212,25 @@ export default function AdminOrders() {
                     <option value="Cancelled">Cancelled</option>
                   </select>
 
-                  <a
-                    href={`https://wa.me/91${order.customer?.phone || ""}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1 text-xs text-green-600 hover:underline"
-                  >
-                    <ExternalLink size={14} /> Contact Customer
-                  </a>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <a
+                      href={`https://wa.me/91${order.customer?.phone || ""}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 text-xs text-green-600 hover:underline"
+                    >
+                      <ExternalLink size={14} />
+                      Contact Customer
+                    </a>
+
+                    <button
+                      onClick={() => sendWhatsAppUpdate(order)}
+                      className="flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                    >
+                      <ExternalLink size={14} />
+                      Send WhatsApp Update
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -234,46 +286,23 @@ export default function AdminOrders() {
                   </div>
                 </div>
 
-                <div className="bg-[#fcfaf8] p-5 rounded-2xl border border-[#ede7df] break-words overflow-hidden min-w-0">
-                  <h4 className="text-[10px] uppercase tracking-widest text-[#a89880] mb-4">
-                    Delivery Details
-                  </h4>
+                <div>
+                  <p className="text-[10px] text-[#a89880] uppercase">
+                    Address
+                  </p>
 
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      <p className="text-[10px] text-[#a89880] uppercase">
-                        Customer
-                      </p>
+                  <p className="text-[#2c2c2c] leading-relaxed break-words whitespace-normal">
+                    {order.customer?.address || "N/A"}
+                  </p>
 
-                      <p className="font-medium text-[#2c2c2c] break-words">
-                        {order.customer?.name || "N/A"}
-                      </p>
-                    </div>
+                  <p className="text-[#2c2c2c] break-words mt-2">
+                    {order.customer?.city || "N/A"}
+                    {order.customer?.district ? `, ${order.customer.district}` : ""}
+                  </p>
 
-                    <div>
-                      <p className="text-[10px] text-[#a89880] uppercase">
-                        Phone
-                      </p>
-
-                      <p className="text-[#2c2c2c] break-words">
-                        +91 {order.customer?.phone || "N/A"}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[10px] text-[#a89880] uppercase">
-                        Address
-                      </p>
-
-                      <p className="text-[#2c2c2c] leading-relaxed break-words whitespace-normal">
-                        {order.customer?.address || "N/A"}
-                      </p>
-
-                      <p className="text-[#2c2c2c] break-words">
-                        {order.customer?.pincode || "N/A"}
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-[#2c2c2c] break-words">
+                    PIN - {order.customer?.pincode || "N/A"}
+                  </p>
                 </div>
               </div>
             </div>

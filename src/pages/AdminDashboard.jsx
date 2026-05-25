@@ -7,6 +7,7 @@ import {
   DollarSign,
   LogOut,
   ChevronRight,
+  Image,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -114,6 +115,13 @@ export default function AdminDashboard() {
             className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm transition-colors"
           >
             <ShoppingBag size={18} /> All Orders
+          </Link>
+
+          <Link
+            to="/admin/site-content"
+            className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm transition-colors"
+          >
+            <Image size={18} /> Site Images
           </Link>
         </nav>
 
@@ -247,15 +255,14 @@ export default function AdminDashboard() {
 
                       <td className="px-6 py-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-[10px] uppercase tracking-widest ${
-                            order.status === "Pending"
+                          className={`px-3 py-1 rounded-full text-[10px] uppercase tracking-widest ${order.status === "Pending"
                               ? "bg-orange-100 text-orange-600"
                               : order.status === "Confirmed"
-                              ? "bg-blue-100 text-blue-600"
-                              : order.status === "Cancelled"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-green-100 text-green-600"
-                          }`}
+                                ? "bg-blue-100 text-blue-600"
+                                : order.status === "Cancelled"
+                                  ? "bg-red-100 text-red-600"
+                                  : "bg-green-100 text-green-600"
+                            }`}
                         >
                           {order.status}
                         </span>

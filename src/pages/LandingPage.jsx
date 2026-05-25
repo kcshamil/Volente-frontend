@@ -7,6 +7,22 @@ import { MenCards, WomenCards, UnisexCards } from "../components/Products";
 import SprayMist from "../components/SprayMist";
 import PerfumeCreation from "../components/PerfumeCreation";
 import ScentQuiz from "../components/ScentQuiz";
+import axios from "axios";  
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const defaultSiteContent = {
+  heroImage: "/V3.jpeg",
+  quizImage: "/Lb4.jpeg",
+  menImage: "/Lp8ml2.jpeg",
+  womenImage:
+    "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
+  unisexImage: "/Lp8ml.jpeg",
+  giftImage: "/gift1.jpg",
+  latestDrop1Image: "/V3.jpeg",
+  latestDrop2Image: "/Lp8ml.jpeg",
+  latestDrop3Image: "/Lp8ml2.jpeg",
+};
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +33,24 @@ function LandingPage() {
   const sectionsRef = useRef([]);
   const [isSpraying, setIsSpraying] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+
+  const [siteContent, setSiteContent] = useState(defaultSiteContent);
+
+  useEffect(() => {
+  const fetchSiteContent = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/site-content`);
+      setSiteContent({
+        ...defaultSiteContent,
+        ...(res.data?.data || {}),
+      });
+    } catch (err) {
+      console.error("Failed to fetch site content:", err);
+    }
+  };
+
+  fetchSiteContent();
+}, []);
 
   useEffect(() => {
     sectionsRef.current.forEach((section) => {
@@ -38,6 +72,8 @@ function LandingPage() {
       );
     });
   }, []);
+
+  
 
   const scrollToSplit = () => {
     splitSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -97,7 +133,7 @@ function LandingPage() {
               <SprayMist active={isSpraying} />
             </div>
             <img
-              src="/V3.jpeg"
+              src={siteContent.heroImage}
               alt="Volonté Layam Edition"
               className="h-full w-auto object-contain drop-shadow-xl relative z-10"
             />
@@ -146,7 +182,7 @@ function LandingPage() {
               <SprayMist active={isSpraying} />
             </div>
             <img
-              src="/V3.jpeg"
+              src={siteContent.heroImage}
               alt="Volonté Layam Edition"
               className="h-full w-auto object-contain drop-shadow-2xl relative z-10"
             />
@@ -221,7 +257,7 @@ function LandingPage() {
           <div className="relative z-10 w-full md:w-auto flex justify-center">
             <div className="w-40 h-52 md:w-48 md:h-64 rounded-2xl shadow-xl overflow-hidden rotate-3">
               <img
-                src="/Lb4.jpeg"
+                src={siteContent.quizImage}
                 alt="Layam Edition"
                 className="w-full h-full object-cover"
               />
@@ -247,7 +283,7 @@ function LandingPage() {
               path: "/men",
               btn: "Shop Men",
               // ✅ CLIENT IMAGE: dark 8ml bottles — dark moody men aesthetic
-              img: "/Lp8ml2.jpeg",
+              img: siteContent.menImage,
             },
             {
               label: "Unisex",
@@ -256,14 +292,14 @@ function LandingPage() {
               btn: "Shop Unisex",
               badge: "New",
               // ✅ CLIENT IMAGE: coloured 8ml bottles — vibrant unisex collection
-              img: "/Lp8ml.jpeg",
+              img: siteContent.unisexImage,
             },
             {
               label: "Women",
               sub: "Floral. Soft. Timeless.",
               path: "/women",
               btn: "Shop Women",
-              img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
+              img: siteContent.womenImage,
             },
           ].map(({ label, sub, path, btn, badge, img }) => (
             <div
@@ -507,19 +543,19 @@ function LandingPage() {
               name: "Layam Edition",
               price: "2,499",
               // ✅ CLIENT IMAGE: Layam stone shot
-              img: "/V3.jpeg",
+              img: siteContent.latestDrop1Image,
             },
             {
               name: "Luxury 8ml Set",
               price: "1,299",
               // ✅ CLIENT IMAGE: coloured 8ml bottles
-              img: "/Lp8ml.jpeg",
+              img: siteContent.latestDrop2Image,
             },
             {
               name: "Premium Dark Set",
               price: "1,499",
               // ✅ CLIENT IMAGE: dark 8ml bottles
-              img: "/Lp8ml2.jpeg",
+              img: siteContent.latestDrop3Image,
             },
           ].map(({ name, price, img }) => (
             <div key={name} className="flex gap-4 items-center bg-white/60 rounded-2xl p-3">
@@ -597,7 +633,7 @@ function LandingPage() {
       >
         <div className="mx-auto max-w-5xl flex flex-col gap-8 md:grid md:grid-cols-2 items-center">
           <div className="rounded-2xl overflow-hidden h-[58vw] md:h-[400px] w-full">
-            <img src="/gift1.jpg" alt="Gift Set" className="w-full h-full object-cover" />
+            <img src={siteContent.giftImage} alt="Gift Set" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-3">Gift Someone Special</p>

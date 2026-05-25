@@ -220,11 +220,10 @@ export function ProductModal({ product, onClose }) {
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`py-2.5 rounded-xl text-xs border ${
-                    selectedSize === size
-                      ? "bg-[#2c2c2c] text-white border-[#2c2c2c]"
-                      : "bg-white text-[#7a6e65] border-[#d5ccc3]"
-                  }`}
+                  className={`py-2.5 rounded-xl text-xs border ${selectedSize === size
+                    ? "bg-[#2c2c2c] text-white border-[#2c2c2c]"
+                    : "bg-white text-[#7a6e65] border-[#d5ccc3]"
+                    }`}
                 >
                   {size}
                 </button>
@@ -266,11 +265,10 @@ export function ProductModal({ product, onClose }) {
             <button
               onClick={handleAddToCart}
               disabled={!selectedSize}
-              className={`py-3 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border ${
-                selectedSize
-                  ? "bg-white text-[#2c2c2c] border-[#2c2c2c]"
-                  : "bg-white text-[#b0a090] border-[#d5ccc3]"
-              }`}
+              className={`py-3 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border ${selectedSize
+                ? "bg-white text-[#2c2c2c] border-[#2c2c2c]"
+                : "bg-white text-[#b0a090] border-[#d5ccc3]"
+                }`}
             >
               {added ? <Check size={14} /> : <ShoppingCart size={14} />}
               {added ? "Added" : "Cart"}
@@ -279,11 +277,10 @@ export function ProductModal({ product, onClose }) {
             <button
               onClick={handleBuyNow}
               disabled={!selectedSize}
-              className={`py-3 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 ${
-                selectedSize
-                  ? "bg-[#2c2c2c] text-white"
-                  : "bg-[#e8dfd5] text-[#a89880]"
-              }`}
+              className={`py-3 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 ${selectedSize
+                ? "bg-[#2c2c2c] text-white"
+                : "bg-[#e8dfd5] text-[#a89880]"
+                }`}
             >
               <Zap size={14} /> Buy Now
             </button>
@@ -300,8 +297,13 @@ function ProductCard({ product, onOpen }) {
 
   const tagStyle = TAG_STYLES[product.tag] || TAG_STYLES.default;
 
-  const discount = product.originalPrice
-    ? Math.round((1 - product.price / product.originalPrice) * 100)
+  const hasOriginalPrice =
+    Number(product.originalPrice) > Number(product.price);
+
+  const discount = hasOriginalPrice
+    ? Math.round(
+        (1 - Number(product.price) / Number(product.originalPrice)) * 100
+      )
     : null;
 
   return (
@@ -317,6 +319,7 @@ function ProductCard({ product, onOpen }) {
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
 
+        {/* Top Tags */}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.tag && (
             <span
@@ -327,13 +330,14 @@ function ProductCard({ product, onOpen }) {
             </span>
           )}
 
-          {discount && (
+          {discount > 0 && (
             <span className="bg-red-600 text-white text-[7px] md:text-[8px] px-2 py-1 rounded-full">
               -{discount}%
             </span>
           )}
         </div>
 
+        {/* Wishlist */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -348,6 +352,7 @@ function ProductCard({ product, onOpen }) {
           />
         </button>
 
+        {/* Rating */}
         {product.rating && (
           <div className="absolute bottom-2 left-2 bg-white/90 rounded-full px-2 py-1 flex items-center gap-1">
             <Star size={10} fill="#c9a96e" color="#c9a96e" />
@@ -358,6 +363,7 @@ function ProductCard({ product, onOpen }) {
         )}
       </div>
 
+      {/* Content */}
       <div className="p-2.5 md:p-3 flex flex-col gap-1 flex-1">
         <h3
           className="text-[14px] md:text-[16px] text-[#1a1a1a] leading-tight line-clamp-1"
@@ -366,6 +372,7 @@ function ProductCard({ product, onOpen }) {
           {product.name}
         </h3>
 
+        {/* Price */}
         <div className="flex items-center gap-2">
           <span
             className="text-[15px] md:text-[17px] text-[#1a1a1a]"
@@ -374,19 +381,21 @@ function ProductCard({ product, onOpen }) {
             ₹{Number(product.price).toLocaleString("en-IN")}
           </span>
 
-          {product.originalPrice && (
+          {hasOriginalPrice && (
             <span className="text-[9px] md:text-[10px] text-[#b0a090] line-through">
               ₹{Number(product.originalPrice).toLocaleString("en-IN")}
             </span>
           )}
         </div>
 
+        {/* Notes */}
         {product.notes && (
           <p className="text-[8px] md:text-[9px] text-[#a89880] line-clamp-1">
             {product.notes}
           </p>
         )}
 
+        {/* Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
