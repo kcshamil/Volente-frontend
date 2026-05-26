@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const FALLBACK_PERFUMES = [
   {
     _id: "fallback-men-1",
-    name: "Volente Homme",
+    name: "Volonté Homme",
     category: "Men",
     tag: "Premium",
     img: "/V3.jpeg",
@@ -16,7 +16,7 @@ const FALLBACK_PERFUMES = [
   },
   {
     _id: "fallback-women-1",
-    name: "Volente Femme",
+    name: "Volonté Femme",
     category: "Women",
     tag: "Floral",
     img: "/Lp8ml.jpeg",
@@ -24,7 +24,7 @@ const FALLBACK_PERFUMES = [
   },
   {
     _id: "fallback-unisex-1",
-    name: "Volente Noir",
+    name: "Volonté Noir",
     category: "Unisex",
     tag: "Fresh",
     img: "/Lp8ml2.jpeg",

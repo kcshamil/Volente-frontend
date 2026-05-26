@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
 
-const SHOP_NAME = "Volente";
+const SHOP_NAME = "Volonté";
 const SHOP_PHONE = "+91 8891163878";
 const SHOP_WA = "919207388631";
 

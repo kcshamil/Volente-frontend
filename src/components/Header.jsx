@@ -34,8 +34,26 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartCount, setCartCount] = useState(getCartCount);
   const [cartBump, setCartBump] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("volente_theme") || "light";
+  });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("volente_theme", theme);
+    // Dispatch custom event to notify other components of the theme change
+    window.dispatchEvent(new CustomEvent("volenteThemeChanged", { detail: theme }));
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   useEffect(() => {
     const sync = () => {
@@ -87,10 +105,10 @@ export default function Header() {
             >
               <div className="w-9 h-9 bg-black rounded-[8px] flex items-center justify-center shadow-md group-hover:bg-gray-800 transition-colors">
                 <span
-                  className="text-white text-[15px] font-black leading-none"
+                  className="text-[17px] font-light leading-none"
                   style={{
-                    fontFamily: "Inter, sans-serif",
-                    letterSpacing: "-0.02em",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    color: "#c9a96e"
                   }}
                 >
                   V
@@ -99,16 +117,19 @@ export default function Header() {
 
               <div className="flex flex-col leading-none">
                 <span
-                  className="text-[18px] font-black text-[#1a1a1a] tracking-tight uppercase group-hover:text-black transition-colors"
+                  className="text-[18px] font-light text-[#1a1a1a] uppercase group-hover:text-black transition-colors"
                   style={{
-                    fontFamily: "Inter, sans-serif",
-                    letterSpacing: "-0.03em",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    letterSpacing: "0.24em",
                   }}
                 >
-                  VOLENTE
+                  VOLONTÉ
                 </span>
 
-                <span className="text-[7.5px] uppercase tracking-[0.25em] text-gray-400 mt-[2px]">
+                <span 
+                  className="text-[7.5px] uppercase tracking-[0.25em] mt-[2px] font-semibold"
+                  style={{ color: "#c9a96e" }}
+                >
                   Fragrance
                 </span>
               </div>
@@ -120,8 +141,11 @@ export default function Header() {
             >
               <div className="w-8 h-8 bg-black rounded-[7px] flex items-center justify-center">
                 <span
-                  className="text-white text-[13px] font-black"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  className="text-[15px] font-light"
+                  style={{ 
+                    fontFamily: "'Cormorant Garamond', serif",
+                    color: "#c9a96e"
+                  }}
                 >
                   V
                 </span>
@@ -129,16 +153,19 @@ export default function Header() {
 
               <div className="flex flex-col leading-none">
                 <span
-                  className="text-[16px] font-black text-[#1a1a1a] uppercase"
+                  className="text-[16px] font-light text-[#1a1a1a] uppercase"
                   style={{
-                    fontFamily: "Inter, sans-serif",
-                    letterSpacing: "-0.03em",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    letterSpacing: "0.22em",
                   }}
                 >
-                  VOLENTE
+                  VOLONTÉ
                 </span>
 
-                <span className="text-[6.5px] uppercase tracking-[0.2em] text-gray-400 mt-[1px]">
+                <span 
+                  className="text-[6.5px] uppercase tracking-[0.2em] mt-[1px] font-semibold"
+                  style={{ color: "#c9a96e" }}
+                >
                   Fragrance
                 </span>
               </div>
@@ -157,6 +184,23 @@ export default function Header() {
             </nav>
 
             <div className="flex items-center gap-3">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1a1a1a] text-[#2c2c2c] dark:text-[#f5f0eb] border border-[#ede7df] dark:border-[#2c2c2c] hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors shadow-sm"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                  </svg>
+                ) : (
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+
               <button
                 onClick={handleCartClick}
                 className="relative flex items-center justify-center w-10 h-10 rounded-full bg-black hover:bg-gray-800 transition-colors shadow-md"
@@ -208,8 +252,11 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-black rounded-[7px] flex items-center justify-center">
               <span
-                className="text-white text-[13px] font-black"
-                style={{ fontFamily: "Inter, sans-serif" }}
+                className="text-[15px] font-light"
+                style={{ 
+                  fontFamily: "'Cormorant Garamond', serif",
+                  color: "#c9a96e"
+                }}
               >
                 V
               </span>
@@ -217,24 +264,46 @@ export default function Header() {
 
             <div className="flex flex-col leading-none">
               <span
-                className="text-[15px] font-black text-[#1a1a1a] uppercase"
+                className="text-[15px] font-light text-[#1a1a1a] uppercase"
                 style={{
-                  fontFamily: "Inter, sans-serif",
-                  letterSpacing: "-0.03em",
+                  fontFamily: "'Cormorant Garamond', serif",
+                  letterSpacing: "0.2em",
                 }}
               >
-                VOLENTE
+                VOLONTÉ
               </span>
 
-              <span className="text-[6.5px] uppercase tracking-[0.2em] text-gray-400 mt-[1px]">
+              <span 
+                className="text-[6.5px] uppercase tracking-[0.2em] mt-[1px] font-semibold"
+                style={{ color: "#c9a96e" }}
+              >
                 Fragrance
               </span>
             </div>
           </div>
 
-          <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-            <X className="h-5 w-5 text-gray-500" />
-          </button>
+          <div className="flex items-center gap-4">
+            {/* Theme Toggle Button in Mobile Drawer */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-[#1a1a1a] text-[#2c2c2c] dark:text-[#f5f0eb] border border-[#ede7df] dark:border-[#2c2c2c] transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
+            <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
+              <X className="h-5 w-5 text-gray-500" />
+            </button>
+          </div>
         </div>
 
         <nav className="flex flex-col px-6 py-4 flex-1">

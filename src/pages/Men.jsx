@@ -174,7 +174,7 @@ function Men() {
       </div>
 
       {/* ── SECTION LABEL ── */}
-      <div style={{ background: "#dce8e5", padding: "28px 16px 12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="collection-header" style={{ background: "#dce8e5", padding: "28px 16px 12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <p style={{ fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#a89880", marginBottom: 4 }}>
             Scroll to explore →
@@ -211,7 +211,7 @@ function Men() {
       </section>
 
       {/* ── CROSS NAVIGATION ── */}
-      <section style={{ background: "#f5f0eb", padding: "36px 16px" }}>
+      <section className="explore-more-section" style={{ background: "#f5f0eb", padding: "36px 16px" }}>
         <p style={{ textAlign: "center", fontFamily: "Barlow, sans-serif", fontSize: 9, letterSpacing: "0.35em", textTransform: "uppercase", color: "#a89880", marginBottom: 20 }}>Explore More</p>
         <div style={{ display: "flex", gap: 12, maxWidth: 500, margin: "0 auto" }}>
           {[

@@ -32,7 +32,7 @@ export default function Contact() {
   const handleSend = () => {
     if (!form.name.trim() || !form.message.trim()) return;
     const text = encodeURIComponent(
-      `👋 *Contact from Volente Website*\n` +
+      `👋 *Contact from Volonté Website*\n` +
       `──────────────────────────────\n` +
       `Name: ${form.name}\n` +
       `Email: ${form.email || "—"}\n` +
@@ -118,7 +118,7 @@ export default function Contact() {
                 We're always happy to help
               </h2>
               <p className="text-sm text-[#7a6e65] leading-relaxed">
-                Whether you need help choosing a fragrance, tracking your order, or just want to learn more about Volente — reach out anytime.
+                Whether you need help choosing a fragrance, tracking your order, or just want to learn more about Volonté — reach out anytime.
               </p>
             </div>
 
@@ -268,7 +268,7 @@ export default function Contact() {
               className="font-light text-[#2c2c2c] mb-1"
               style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24 }}
             >
-              Volente — Manjeri, Kerala
+              Volonté — Manjeri, Kerala
             </h3>
             <p className="text-sm text-[#7a6e65]">{SHOP_ADDRESS}</p>
           </div>

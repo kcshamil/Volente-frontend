@@ -68,3 +68,209 @@
 .animate-modal-slide-down {
   animation: modal-slide-down 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
+
+/* ── Volonté Premium Dark Mode Theme ── */
+.dark body {
+  background-color: #121212;
+  color: #f5f0eb;
+}
+
+.dark .bg-white {
+  background-color: #121212 !important;
+  color: #f5f0eb !important;
+}
+
+.dark .bg-\[\#fcfbfa\] {
+  background-color: #121212 !important;
+  color: #f5f0eb !important;
+}
+
+.dark .bg-\[\#f5f0eb\] {
+  background-color: #181818 !important;
+  color: #f5f0eb !important;
+}
+
+.dark .text-\[\#2c2c2c\] {
+  color: #f5f0eb !important;
+}
+
+.dark .text-\[\#1a1a1a\] {
+  color: #ffffff !important;
+}
+
+.dark .text-\[\#7a6e65\] {
+  color: #a89880 !important;
+}
+
+.dark .border-\[\#ede7df\] {
+  border-color: #242424 !important;
+}
+
+.dark .border-\[\#ede7df\]\/50 {
+  border-color: #242424 !important;
+}
+
+.dark .border-\[\#d5ccc3\] {
+  border-color: #2c2c2c !important;
+}
+
+/* Header Dark Overrides */
+.dark .bg-\[\#dfe7eb\] {
+  background-color: #111111 !important;
+}
+
+.dark .bg-\[\#edf3f5\] {
+  background-color: #161616 !important;
+}
+
+.dark .bg-\[\#dfe9ed\] {
+  background-color: #1d1d1d !important;
+}
+
+.dark .text-gray-500 {
+  color: #a89880 !important;
+}
+
+.dark .text-gray-500:hover {
+  color: #ffffff !important;
+}
+
+/* Product Cards & Modals Dark Overrides */
+.dark .bg-white.rounded-2xl {
+  background-color: #181818 !important;
+  border: 1px solid #242424;
+}
+
+.dark .bg-white\/90 {
+  background-color: rgba(24, 24, 24, 0.9) !important;
+}
+
+.dark .bg-white\/60 {
+  background-color: rgba(24, 24, 24, 0.6) !important;
+}
+
+.dark .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .bg-\[\#f0ece6\] {
+  background-color: #1f1f1f !important;
+}
+
+.dark .bg-\[\#ede7df\] {
+  background-color: #1a1a1a !important;
+}
+
+.dark .bg-green-50 {
+  background-color: #1a2f24 !important;
+  border-color: #254432 !important;
+  color: #8be0ab !important;
+}
+
+/* Forms & Inputs Dark Overrides */
+.dark input {
+  background-color: #1d1d1d !important;
+  color: #ffffff !important;
+  border-color: #2c2c2c !important;
+}
+
+.dark input::placeholder {
+  color: #555555 !important;
+}
+
+.dark textarea {
+  background-color: #1d1d1d !important;
+  color: #ffffff !important;
+  border-color: #2c2c2c !important;
+}
+
+.dark textarea::placeholder {
+  color: #555555 !important;
+}
+
+.dark .bg-\[\#f9f6f3\] {
+  background-color: #1c1c1c !important;
+  border-color: #2d2d2d !important;
+}
+
+.dark button.bg-white {
+  background-color: #222222 !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+}
+
+/* ── Collection Pages (Men, Women, Unisex) Dark Overrides ── */
+.dark .filter-bar {
+  background-color: #181818 !important;
+  background: #181818 !important;
+  border-bottom: 1px solid #242424 !important;
+}
+
+.dark .filter-bar span {
+  color: #a89880 !important;
+}
+
+.dark .men-pill, .dark .women-pill, .dark .unisex-pill {
+  border-color: #2c2c2c !important;
+  color: #a89880 !important;
+  background-color: #1e1e1e !important;
+}
+
+.dark .men-pill:hover, .dark .women-pill:hover, .dark .unisex-pill:hover {
+  background-color: #c9a96e !important;
+  border-color: #c9a96e !important;
+  color: #121212 !important;
+}
+
+.dark .filter-bar select {
+  color: #ffffff !important;
+}
+
+.dark .filter-bar select option {
+  background-color: #181818 !important;
+  color: #ffffff !important;
+}
+
+.dark .collection-header {
+  background-color: #181818 !important;
+  background: #181818 !important;
+}
+
+.dark .collection-header h2 {
+  color: #ffffff !important;
+}
+
+.dark .collection-header p {
+  color: #a89880 !important;
+}
+
+.dark .explore-more-section {
+  background-color: #181818 !important;
+  background: #181818 !important;
+  border-top: 1px solid #242424 !important;
+}
+
+.dark .explore-more-section p {
+  color: #a89880 !important;
+}
+
+/* ── Landing Page Men & Women Sections Dark Overrides ── */
+.dark .bg-\[\#dce8e5\] {
+  background-color: #151e1b !important;
+  background: linear-gradient(135deg, #151e1b 0%, #0d1210 100%) !important;
+}
+
+.dark .bg-\[\#f0e8e4\] {
+  background-color: #241817 !important;
+  background: linear-gradient(135deg, #241817 0%, #140d0c 100%) !important;
+}
+
+.dark .border-\[\#2c2c2c\] {
+  border-color: #f5f0eb !important;
+}
+
+.dark button.border-\[\#2c2c2c\]:hover {
+  border-color: #c9a96e !important;
+  color: #c9a96e !important;
+  background-color: transparent !important;
+}

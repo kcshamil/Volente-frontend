@@ -7,7 +7,7 @@ import { MenCards, WomenCards, UnisexCards } from "../components/Products";
 import SprayMist from "../components/SprayMist";
 import PerfumeCreation from "../components/PerfumeCreation";
 import ScentQuiz from "../components/ScentQuiz";
-import axios from "axios";  
+import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -31,26 +31,38 @@ function LandingPage() {
   const navigate = useNavigate();
   const splitSectionRef = useRef(null);
   const sectionsRef = useRef([]);
-  const [isSpraying, setIsSpraying] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem("volente_theme") || "light");
+  const [isSpraying, setIsSpraying] = useState(false);
 
   const [siteContent, setSiteContent] = useState(defaultSiteContent);
 
   useEffect(() => {
-  const fetchSiteContent = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/site-content`);
-      setSiteContent({
-        ...defaultSiteContent,
-        ...(res.data?.data || {}),
-      });
-    } catch (err) {
-      console.error("Failed to fetch site content:", err);
-    }
-  };
+    const handleThemeChange = (e) => {
+      setTheme(e.detail || localStorage.getItem("volente_theme") || "light");
+    };
+    window.addEventListener("volenteThemeChanged", handleThemeChange);
+    return () => window.removeEventListener("volenteThemeChanged", handleThemeChange);
+  }, []);
 
-  fetchSiteContent();
-}, []);
+  const isDarkTheme = theme === "dark";
+  const brandEmblemSrc = isDarkTheme ? "/volente-light-card.jpg" : "/volente-dark-logo.jpg";
+
+  useEffect(() => {
+    const fetchSiteContent = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/site-content`);
+        setSiteContent({
+          ...defaultSiteContent,
+          ...(res.data?.data || {}),
+        });
+      } catch (err) {
+        console.error("Failed to fetch site content:", err);
+      }
+    };
+
+    fetchSiteContent();
+  }, []);
 
   useEffect(() => {
     sectionsRef.current.forEach((section) => {
@@ -73,7 +85,7 @@ function LandingPage() {
     });
   }, []);
 
-  
+
 
   const scrollToSplit = () => {
     splitSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -200,7 +212,7 @@ function LandingPage() {
                 The Art of Invisible Luxury
               </h2>
               <p className="mt-4 text-sm leading-6 text-[#7a6e65]">
-                Hand-crafted fragrances that linger long after you leave the room.
+                Hand- fragrances that linger long after you leave the room.
               </p>
               <button
                 onClick={scrollToSplit}
@@ -218,7 +230,7 @@ function LandingPage() {
         <div className="flex animate-marquee whitespace-nowrap">
           {[...Array(8)].map((_, i) => (
             <span key={i} className="text-[10px] tracking-[0.3em] uppercase text-[#a89880] mx-6">
-              Volente · Long Lasting · Handcrafted · Premium · Free Shipping Rs.999+
+              Volonté · Long Lasting · Handcrafted · Premium · Free Shipping Rs.999+
             </span>
           ))}
         </div>
@@ -398,14 +410,14 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* WHY VOLENTE */}
+      {/* WHY VOLONTÉ */}
       <section
         ref={(el) => (sectionsRef.current[2] = el)}
         className="w-full bg-[#f5f0eb] py-12 md:py-16 px-6"
         style={{ fontFamily: "Barlow, sans-serif" }}
       >
         <div className="text-center mb-10 md:mb-12">
-          <p className="text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-3">Why Volente</p>
+          <p className="text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-3">Why Volonté</p>
           <h2
             className="text-3xl font-light text-[#2c2c2c]"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -415,8 +427,8 @@ function LandingPage() {
         </div>
         <div className="flex flex-col gap-8 md:grid md:grid-cols-3 max-w-5xl mx-auto">
           {[
-            { icon: "🌿", title: "Natural Ingredients", desc: "Sourced from the finest botanical gardens across France, India & the Middle East." },
-            { icon: "⏳", title: "Long-Lasting", desc: "Our Eau de Parfum ensures 10–14 hours of lingering fragrance." },
+            { icon: "🌿", title: "Natural Ingredients", desc: "Crafted with luxurious ingredients inspired by the timeless scent traditions of Kerala." },
+            { icon: "⏳", title: "Long-Lasting", desc: "Our Eau de Parfum ensures 8-10 hours of lingering fragrance." },
             { icon: "🫙", title: "Artisan Bottled", desc: "Hand-poured in premium glass bottles — a gift to yourself or loved ones." },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="flex flex-col items-center gap-3 text-center">
@@ -443,7 +455,7 @@ function LandingPage() {
               Where Science <br /> Meets Soul
             </h2>
             <p className="text-sm text-[#7a6e65] leading-relaxed mb-7 max-w-md">
-              Every drop of Volente is a symphony of rare essences. We don't just
+              Every drop of Volonté is a symphony of rare essences. We don't just
               mix scents; we curate memories, blending traditional alchemy with
               modern elegance.
             </p>
@@ -460,6 +472,40 @@ function LandingPage() {
           </div>
           <div className="order-1 md:order-2 w-full">
             <PerfumeCreation />
+          </div>
+        </div>
+      </section>
+
+      {/* BRAND HERITAGE SECTION */}
+      <section className="w-full bg-[#fcfbfa] py-16 md:py-24 px-6 border-t border-b border-[#ede7df]">
+        <div className="max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-12 items-center gap-10 md:gap-16">
+          <div className="md:col-span-7 order-2 md:order-1">
+            <p className="text-[9px] tracking-[0.4em] uppercase text-[#a89880] mb-4">The Emblem</p>
+            <h2
+              className="text-4xl md:text-5xl font-light text-[#2c2c2c] leading-tight mb-6"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              The Story of <br /> Volonté Luxury
+            </h2>
+            <p className="text-sm text-[#7a6e65] leading-relaxed mb-6">
+              Our name, derived from the timeless pursuit of presence and memory, represents our willpower to create extraordinary olfactory experiences. Every fragrance is a testament to sophisticated craftsmanship, housed in a vessel of timeless elegance.
+            </p>
+            <p className="text-sm text-[#7a6e65] leading-relaxed">
+              Embossed with gold foil and crafted with precision, the Volonté emblem stands for authenticity, luxury, and the art of invisible presence.
+            </p>
+          </div>
+          
+          <div className="md:col-span-5 order-1 md:order-2 w-full flex justify-center">
+            <div 
+              className="relative w-full max-w-[340px] aspect-square rounded-3xl overflow-hidden shadow-xl border border-[#ede7df] dark:border-[#242424] hover:scale-[1.02] transition-transform duration-500 bg-[#f5f0eb] dark:bg-[#1a1a1a] p-6 flex items-center justify-center select-none"
+              style={{ minHeight: "340px" }}
+            >
+              <img 
+                src={brandEmblemSrc} 
+                alt="Volonté Brand Emblem" 
+                className="w-[80%] h-auto object-contain rounded-2xl transition-all duration-700 ease-in-out" 
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -521,7 +567,7 @@ function LandingPage() {
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[22vw] md:text-[14vw] font-light tracking-widest text-[#2c2c2c]/[0.05] select-none pointer-events-none whitespace-nowrap leading-none z-0 uppercase"
           style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
-          VOLENTE
+          VOLONTÉ
         </span>
 
         <div className="relative z-10 flex items-center justify-between mb-7">
@@ -614,7 +660,7 @@ function LandingPage() {
         style={{ background: "linear-gradient(135deg, #2c2c2c 0%, #4a3f35 100%)" }}
       >
         <div className="text-center z-10 max-w-xs md:max-w-3xl mx-auto">
-          <p className="text-[9px] tracking-[0.4em] uppercase text-[#a89880] mb-6">The Volente Philosophy</p>
+          <p className="text-[9px] tracking-[0.4em] uppercase text-[#a89880] mb-6">The Volonté Philosophy</p>
           <h2
             className="text-2xl md:text-6xl font-light text-white leading-relaxed"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -641,7 +687,7 @@ function LandingPage() {
               The Perfect Gift, Beautifully Wrapped
             </h2>
             <p className="text-sm text-[#7a6e65] leading-relaxed mb-6">
-              Every Volente order arrives in our signature gift box. Perfect for
+              Every Volonté order arrives in our signature gift box. Perfect for
               birthdays, anniversaries, and festive occasions.
             </p>
             <button

@@ -145,7 +145,7 @@ function Women() {
       </section>
 
       {/* ── FILTER / SORT BAR ── */}
-      <div className="bg-[#f0e8e4] px-5 py-5 flex items-center gap-3 overflow-x-auto" style={{ fontFamily: "Barlow, sans-serif" }}>
+      <div className="filter-bar bg-[#f0e8e4] px-5 py-5 flex items-center gap-3 overflow-x-auto" style={{ fontFamily: "Barlow, sans-serif" }}>
         <span className="text-[9px] tracking-[0.25em] uppercase text-[#9a7080] flex-shrink-0 mr-2">Filter:</span>
         {["All", "Bestseller", "New", "Premium", "Floral"].map((tag) => (
           <button key={tag} className="women-pill flex-shrink-0">{tag}</button>
@@ -162,7 +162,7 @@ function Women() {
       </div>
 
       {/* ── SECTION LABEL ── */}
-      <div className="bg-[#f0e8e4] px-5 pt-10 pb-3 flex items-center justify-between">
+      <div className="collection-header bg-[#f0e8e4] px-5 pt-10 pb-3 flex items-center justify-between">
         <div>
           <p className="text-[9px] tracking-[0.25em] uppercase text-[#a89880] mb-1">Scroll to explore →</p>
           <h2 className="text-2xl md:text-4xl font-light text-[#2c2c2c] leading-none" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
@@ -199,7 +199,7 @@ function Women() {
       </section>
 
       {/* ── CROSS NAVIGATION ── */}
-      <section className="bg-[#f5f0eb] py-12 px-5" style={{ fontFamily: "Barlow, sans-serif" }}>
+      <section className="explore-more-section bg-[#f5f0eb] py-12 px-5" style={{ fontFamily: "Barlow, sans-serif" }}>
         <p className="text-center text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-8">Explore More</p>
         <div className="flex gap-4 max-w-2xl mx-auto">
           {[
