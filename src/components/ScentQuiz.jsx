@@ -5,18 +5,54 @@ import gsap from 'gsap';
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+const FALLBACK_PERFUMES = [
+  {
+    _id: "fallback-men-1",
+    name: "Volente Homme",
+    category: "Men",
+    tag: "Premium",
+    img: "/V3.jpeg",
+    description: "A bold, intense woody composition with rich amber and spices. Designed for timeless presence.",
+  },
+  {
+    _id: "fallback-women-1",
+    name: "Volente Femme",
+    category: "Women",
+    tag: "Floral",
+    img: "/Lp8ml.jpeg",
+    description: "A soft, floral bouquet of fresh roses and jasmine with a touch of sweet vanilla.",
+  },
+  {
+    _id: "fallback-unisex-1",
+    name: "Volente Noir",
+    category: "Unisex",
+    tag: "Fresh",
+    img: "/Lp8ml2.jpeg",
+    description: "An elegant, unisex signature blend of fresh citrus, lavender, and sensual musk.",
+  }
+];
+
 const ScentQuiz = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [perfumes, setPerfumes] = useState([]);
+  const [perfumes, setPerfumes] = useState(FALLBACK_PERFUMES);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       // Fetch perfumes to have them ready for recommendation
-      axios.get(`${API_URL}/perfumes`).then(res => setPerfumes(res.data));
+      axios.get(`${API_URL}/perfumes`)
+        .then(res => {
+          const list = res.data?.data || res.data;
+          if (Array.isArray(list) && list.length > 0) {
+            setPerfumes(list);
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching perfumes in quiz:", err);
+        });
     } else {
       document.body.style.overflow = '';
       setStep(0);
