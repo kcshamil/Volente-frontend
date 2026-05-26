@@ -5,7 +5,6 @@ import {
   MapPin,
   Clock,
   MessageCircle,
-  CreditCard,
   ShieldCheck,
   Truck,
   RotateCcw,
@@ -14,9 +13,9 @@ import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 const SHOP_PHONE = "+91 8891163878";
 const SHOP_EMAIL = "hello@volente.in";
-const SHOP_ADDRESS = "Near New Bus Stand, Manjeri, Kerala";
-const WHATSAPP_NO = "919207388631";
-const INSTAGRAM_URL = "https://instagram.com/volente";
+const SHOP_ADDRESS = "Manjeri, Kerala";
+const WHATSAPP_NO = "918891163878";
+const INSTAGRAM_URL = "https://www.instagram.com/volontefragrance?igsh=MTd3NnE1NDBkbHZ5bw==";
 const FACEBOOK_URL = "https://facebook.com/volente";
 
 export default function Footer() {
@@ -227,13 +226,6 @@ export default function Footer() {
           © {new Date().getFullYear()} Volente. All rights reserved.
         </p>
 
-        <div className="flex items-center gap-3 text-[10px] text-[#657272] uppercase tracking-widest">
-          <CreditCard size={14} />
-          <span>UPI</span>
-          <span>COD</span>
-          <span>Cards</span>
-          <span>Net Banking</span>
-        </div>
 
         <div className="flex items-center gap-5">
           <Link
