@@ -5,12 +5,12 @@ import {
   MapPin,
   Clock,
   MessageCircle,
-  Globe,
   CreditCard,
   ShieldCheck,
   Truck,
   RotateCcw,
 } from "lucide-react";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 const SHOP_PHONE = "+91 8891163878";
 const SHOP_EMAIL = "hello@volente.in";
@@ -111,17 +111,7 @@ export default function Footer() {
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#a89880] hover:text-[#1f1f1f] flex items-center justify-center transition-colors"
               aria-label="Instagram"
             >
-              <Globe size={16} />
-            </a>
-
-            <a
-              href={FACEBOOK_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#a89880] hover:text-[#1f1f1f] flex items-center justify-center transition-colors"
-              aria-label="Facebook"
-            >
-             <span className="text-xs font-bold">f</span>
+              <FaInstagram size={16} />
             </a>
 
             <a
@@ -131,7 +121,7 @@ export default function Footer() {
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#a89880] hover:text-[#1f1f1f] flex items-center justify-center transition-colors"
               aria-label="WhatsApp"
             >
-              <MessageCircle size={16} />
+              <FaWhatsapp size={16} />
             </a>
           </div>
         </div>
