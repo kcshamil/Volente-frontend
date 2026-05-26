@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { createPortal } from "react-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ShoppingCart,
   Check,
@@ -17,6 +19,87 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const ALL_SIZES = ["8ml", "50ml", "100ml"];
 const CART_KEY = "volente_cart";
 
+const FALLBACK_PERFUMES = [
+  {
+    _id: "fb-men-1",
+    name: "Layam Edition",
+    category: "Men",
+    tag: "Premium",
+    price: 2499,
+    originalPrice: 2999,
+    img: "/V3.jpeg",
+    notes: "Oud · Cedar · Sandalwood",
+    description: "A bold, intense woody composition with rich amber and spices. Designed for timeless presence.",
+    rating: 4.8,
+    reviews: 24
+  },
+  {
+    _id: "fb-men-2",
+    name: "Premium Dark Set",
+    category: "Men",
+    tag: "Bestseller",
+    price: 1499,
+    originalPrice: 1999,
+    img: "/Lp8ml2.jpeg",
+    notes: "Pepper · Cardamom · Amber",
+    description: "Our signature dark 8ml collection featuring bold spices and deep earthy accents.",
+    rating: 4.9,
+    reviews: 42
+  },
+  {
+    _id: "fb-unisex-1",
+    name: "Luxury 8ml Set",
+    category: "Unisex",
+    tag: "Bestseller",
+    price: 1299,
+    originalPrice: 1599,
+    img: "/Lp8ml.jpeg",
+    notes: "Musk · Aldehydes · Vetiver",
+    description: "A complete collection of elegant unisex blends for every mood and occasion.",
+    rating: 4.7,
+    reviews: 56
+  },
+  {
+    _id: "fb-women-1",
+    name: "Rose & Jasmine",
+    category: "Women",
+    tag: "Floral",
+    price: 1799,
+    originalPrice: 2199,
+    img: "/Lp8ml.jpeg",
+    notes: "Rose · Jasmine · Sweet Vanilla",
+    description: "A soft, floral bouquet of fresh roses and jasmine with a touch of sweet vanilla.",
+    rating: 4.8,
+    reviews: 31
+  },
+  {
+    _id: "fb-women-2",
+    name: "Volonté Mist",
+    category: "Women",
+    tag: "Fresh",
+    price: 1599,
+    originalPrice: 1899,
+    img: "/Lp8ml2.jpeg",
+    notes: "Iris · Violet · Cashmere",
+    description: "An elegant signature blend of fresh citrus, lavender, and sensual musk.",
+    rating: 4.6,
+    reviews: 18
+  },
+  {
+    _id: "fb-unisex-2",
+    name: "Signature Oud",
+    category: "Unisex",
+    tag: "Signature",
+    price: 1899,
+    originalPrice: 2499,
+    img: "/V3.jpeg",
+    notes: "Sandalwood · Oud · Labdanum",
+    description: "Deep, mysterious wood notes paired with rich, dry incense oils.",
+    rating: 4.9,
+    reviews: 29
+  }
+];
+
 function usePerfumes() {
   const [perfumes, setPerfumes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,9 +108,15 @@ function usePerfumes() {
     const fetchPerfumes = async () => {
       try {
         const res = await axios.get(`${API_URL}/perfumes`);
-        setPerfumes(res.data?.data || []);
+        const list = res.data?.data || res.data;
+        if (Array.isArray(list) && list.length > 0) {
+          setPerfumes(list);
+        } else {
+          setPerfumes(FALLBACK_PERFUMES);
+        }
       } catch (err) {
-        console.error("Error fetching perfumes:", err);
+        console.error("Error fetching perfumes, using fallbacks:", err);
+        setPerfumes(FALLBACK_PERFUMES);
       } finally {
         setLoading(false);
       }
@@ -35,6 +124,19 @@ function usePerfumes() {
 
     fetchPerfumes();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        try {
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.refresh();
+        } catch (e) {
+          console.warn("GSAP ScrollTrigger refresh failed:", e);
+        }
+      }, 500);
+    }
+  }, [loading]);
 
   return { perfumes, loading };
 }
