@@ -516,7 +516,24 @@ function ProductCard({ product, onOpen }) {
 function ProductGrid({ products, bg }) {
   const [activeProduct, setActiveProduct] = useState(null);
 
-  if (!products.length) return null;
+  if (!products.length) {
+    return (
+      <div style={{ background: bg }} className="py-14 px-5 flex items-center justify-center">
+        <div className="w-full max-w-lg bg-white/70 dark:bg-black/45 backdrop-blur-md rounded-[24px] border border-[#ede7df] dark:border-[#242424] p-8 text-center shadow-md">
+          <span className="text-[9px] tracking-[0.3em] uppercase text-[#a89880] mb-2 block font-medium">Coming Soon</span>
+          <h3 
+            className="text-2xl font-light text-[#2c2c2c] dark:text-[#f5f0eb] mb-3"
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            Curating Elegance
+          </h3>
+          <p className="text-xs text-[#7a6e65] dark:text-[#a89880] leading-relaxed max-w-sm mx-auto">
+            Our master perfumers are currently aging and blending a signature selection of fragrances for this selection. Subscribe below to be notified first of the release.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
