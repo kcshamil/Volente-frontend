@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
+import ScrollToTop from "./components/ScrollToTop";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -24,6 +25,7 @@ import AdminSiteContent from "./pages/AdminSiteContent";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Customer Routes */}
         <Route path="/" element={<><Header /><LandingPage /><Footer /></>} />
