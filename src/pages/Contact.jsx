@@ -4,8 +4,8 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 
 const SHOP_PHONE  = "+91 8891163878";
 const SHOP_EMAIL  = "hello@volente.in";
-const SHOP_ADDRESS = "Near New Bus Stand, Manjeri, Kerala";
-const WHATSAPP_NO = "919207388631";
+const SHOP_ADDRESS = "Manjeri, Kerala";
+const WHATSAPP_NO = "918891163878";
 
 export default function Contact() {
   const navigate  = useNavigate();
