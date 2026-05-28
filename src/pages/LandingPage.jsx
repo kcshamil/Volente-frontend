@@ -36,6 +36,8 @@ function LandingPage() {
   const [isSpraying, setIsSpraying] = useState(false);
 
   const [siteContent, setSiteContent] = useState(defaultSiteContent);
+  const [perfumes, setPerfumes] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     const handleThemeChange = (e) => {
@@ -61,8 +63,51 @@ function LandingPage() {
       }
     };
 
+    const fetchPerfumes = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/perfumes`);
+        const list = res.data?.data || res.data;
+        if (Array.isArray(list)) {
+          setPerfumes(list);
+        }
+      } catch (err) {
+        console.error("Failed to fetch perfumes:", err);
+      }
+    };
+
     fetchSiteContent();
+    fetchPerfumes();
   }, []);
+
+  const getMatchedProduct = (targetName) => {
+    if (!targetName) return null;
+    const cleanTarget = targetName.toLowerCase().replace(/combo|set|edition/g, "").replace(/\s+/g, " ").trim();
+    
+    // Fallback static matches to allow perfect local offline verification
+    const itemsToCheck = perfumes.length > 0 ? perfumes : [
+      { name: "Layam Edition", category: "Men" },
+      { name: "Premium Dark Set", category: "Men" },
+      { name: "Luxury 8ml Set", category: "Unisex" }
+    ];
+
+    return itemsToCheck.find(p => {
+      const cleanPName = p.name.toLowerCase().replace(/combo|set|edition/g, "").replace(/\s+/g, " ").trim();
+      return cleanPName.includes(cleanTarget) || cleanTarget.includes(cleanPName);
+    });
+  };
+
+  const handleLatestDropClick = (name) => {
+    const matched = getMatchedProduct(name);
+    if (matched) {
+      const categoryPath = `/${matched.category.toLowerCase()}`;
+      navigate(categoryPath, { state: { autoOpenProduct: matched.name } });
+    } else {
+      setNotification(`${name} is currently in our master aging cellar. Enter your email in the subscription box below to secure your bottle first!`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 6000);
+    }
+  };
 
   useEffect(() => {
     sectionsRef.current.forEach((section) => {
@@ -84,8 +129,6 @@ function LandingPage() {
       );
     });
   }, []);
-
-
 
   const scrollToSplit = () => {
     splitSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -588,68 +631,155 @@ function LandingPage() {
             {
               name: "Layam Edition",
               price: "400",
-              // ✅ CLIENT IMAGE: Layam stone shot
               img: siteContent.latestDrop1Image,
             },
             {
-              name: "Luxury 8ml Combo Set ",
+              name: "Luxury 8ml Combo Set",
               price: "299",
-              // ✅ CLIENT IMAGE: coloured 8ml bottles
               img: siteContent.latestDrop2Image,
             },
             {
               name: "Premium Dark Combo Set",
               price: "299",
-              // ✅ CLIENT IMAGE: dark 8ml bottles
               img: siteContent.latestDrop3Image,
             },
-          ].map(({ name, price, img }) => (
-            <div key={name} className="flex gap-4 items-center bg-white/60 rounded-2xl p-3">
-              <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
-                <img src={img} alt={name} className="w-full h-full object-cover" />
+          ].map(({ name, price, img }) => {
+            const matched = getMatchedProduct(name);
+            const isAvailable = !!matched;
+            return (
+              <div 
+                key={name} 
+                onClick={() => handleLatestDropClick(name)}
+                className={`flex gap-4 items-center rounded-2xl p-3 transition-all duration-300 ${
+                  isAvailable 
+                    ? "bg-white/60 hover:bg-white/95 hover:shadow-md cursor-pointer" 
+                    : "bg-white/30 opacity-75 cursor-default relative overflow-hidden group"
+                }`}
+              >
+                <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 relative">
+                  <img src={img} alt={name} className="w-full h-full object-cover" />
+                  {!isAvailable && (
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="text-[7px] tracking-widest text-[#c9a96e] uppercase font-bold bg-black/60 px-1.5 py-0.5 rounded">Aging</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-[#2c2c2c] uppercase tracking-wide">
+                    {name}
+                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-[11px] text-[#a89880]">Rs. {price}</p>
+                    {isAvailable ? (
+                      <span className="text-[8px] text-[#c9a96e] uppercase tracking-wider font-semibold">Buy Now →</span>
+                    ) : (
+                      <span className="text-[8px] text-[#a89880] uppercase tracking-wider">Coming Soon</span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium text-[#2c2c2c] uppercase tracking-wide">{name}</p>
-                <p className="text-[11px] text-[#a89880] mt-1">Rs. {price}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* DESKTOP — Latest Drops */}
         <div className="relative z-10 hidden md:grid grid-cols-3 gap-6 items-end">
-          <div className="flex flex-col gap-4 mt-24">
-            {/* ✅ CLIENT IMAGE: Layam stone — editorial product shot */}
-            <div className="h-[320px] rounded-2xl overflow-hidden">
-              <img src="/V3.jpeg" alt="Layam Edition" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Layam Edition</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 400</p>
-            </div>
-          </div>
+          {/* Card 1: Layam Edition */}
+          {(() => {
+            const name = "Layam Edition";
+            const matched = getMatchedProduct(name);
+            const isAvailable = !!matched;
+            return (
+              <div 
+                onClick={() => handleLatestDropClick(name)}
+                className={`flex flex-col gap-4 mt-24 transition-all duration-300 ${
+                  isAvailable ? "cursor-pointer group" : "opacity-80"
+                }`}
+              >
+                <div className="h-[420px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
+                  <img src="/V3.jpeg" alt="Layam Edition" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  {!isAvailable && (
+                    <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className={`text-xs font-medium text-[#2c2c2c] uppercase tracking-wide transition-colors ${isAvailable ? "group-hover:text-[#c9a96e]" : ""}`}>{name}</p>
+                    <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 400</p>
+                  </div>
+                  {isAvailable && (
+                    <span className="text-[9px] tracking-widest text-[#c9a96e] uppercase font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Buy Now →</span>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
-          <div className="flex flex-col gap-4">
-            {/* ✅ CLIENT IMAGE: Coloured 8ml set — centre hero card */}
-            <div className="h-[480px] rounded-2xl overflow-hidden">
-              <img src="/Lp8ml.jpeg" alt="Luxury 8ml Set" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-            </div>
-            <div className="text-center">
-              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Luxury 8ml Combo Set</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
-            </div>
-          </div>
+          {/* Card 2: Luxury 8ml Combo Set */}
+          {(() => {
+            const name = "Luxury 8ml Combo Set";
+            const matched = getMatchedProduct(name);
+            const isAvailable = !!matched;
+            return (
+              <div 
+                onClick={() => handleLatestDropClick(name)}
+                className={`flex flex-col gap-4 transition-all duration-300 ${
+                  isAvailable ? "cursor-pointer group" : "opacity-80"
+                }`}
+              >
+                <div className="h-[480px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
+                  <img src="/Lp8ml.jpeg" alt="Luxury 8ml Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  {!isAvailable && (
+                    <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
+                    </div>
+                  )}
+                </div>
+                <div className="text-center flex flex-col items-center">
+                  <p className={`text-xs font-medium text-[#2c2c2c] uppercase tracking-wide transition-colors ${isAvailable ? "group-hover:text-[#c9a96e]" : ""}`}>{name}</p>
+                  <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
+                  {isAvailable && (
+                    <span className="text-[9px] tracking-widest text-[#c9a96e] uppercase font-semibold mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Buy Now →</span>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
-          <div className="flex flex-col gap-4 mt-16">
-            <div className="text-right">
-              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Premium Dark Combo Set</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
-            </div>
-            {/* ✅ CLIENT IMAGE: Dark 8ml set */}
-            <div className="h-[280px] rounded-2xl overflow-hidden">
-              <img src="/Lp8ml2.jpeg" alt="Premium Dark Set" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-            </div>
-          </div>
+          {/* Card 3: Premium Dark Combo Set */}
+          {(() => {
+            const name = "Premium Dark Combo Set";
+            const matched = getMatchedProduct(name);
+            const isAvailable = !!matched;
+            return (
+              <div 
+                onClick={() => handleLatestDropClick(name)}
+                className={`flex flex-col gap-4 mt-16 transition-all duration-300 ${
+                  isAvailable ? "cursor-pointer group" : "opacity-80"
+                }`}
+              >
+                <div className="h-[400px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
+                  <img src="/Lp8ml2.jpeg" alt="Premium Dark Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  {!isAvailable && (
+                    <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  {isAvailable && (
+                    <span className="text-[9px] tracking-widest text-[#c9a96e] uppercase font-semibold opacity-0 group-hover:opacity-100 transition-opacity">← Buy Now</span>
+                  )}
+                  <div className="text-right">
+                    <p className={`text-xs font-medium text-[#2c2c2c] uppercase tracking-wide transition-colors ${isAvailable ? "group-hover:text-[#c9a96e]" : ""}`}>{name}</p>
+                    <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
@@ -684,7 +814,7 @@ function LandingPage() {
           <div>
             <p className="text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-3">Gift Someone Special</p>
             <h2 className="text-3xl md:text-4xl font-light text-[#2c2c2c] leading-snug mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-              The Perfect Gift, Beautifully Wrapped
+               The Perfect Gift, Beautifully Wrapped
             </h2>
             <p className="text-sm text-[#7a6e65] leading-relaxed mb-6">
               Every Volonté order arrives in our signature gift box. Perfect for
@@ -701,6 +831,37 @@ function LandingPage() {
       </section>
 
       <ScentQuiz isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+
+      {/* Premium Glassmorphic Toast Notification */}
+      {notification && (
+        <div 
+          style={{
+            position: "fixed",
+            top: "24px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 9999,
+            width: "90%",
+            maxWidth: "400px",
+            transition: "all 0.3s ease-in-out"
+          }}
+        >
+          <div className="bg-black/90 dark:bg-neutral-900/95 text-white backdrop-blur-md border border-[#c9a96e]/30 px-5 py-4 rounded-2xl shadow-2xl flex items-center justify-between gap-3 animate-fade-in">
+            <div className="flex-1">
+              <p className="text-[8px] tracking-[0.25em] uppercase text-[#c9a96e] mb-1 font-medium">Pre-Release Reserve</p>
+              <p className="text-xs text-white/90 leading-relaxed font-light">{notification}</p>
+            </div>
+            <button 
+              onClick={() => setNotification(null)}
+              className="text-white/40 hover:text-white transition-colors cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

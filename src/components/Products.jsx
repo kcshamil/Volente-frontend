@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { createPortal } from "react-dom";
 import gsap from "gsap";
@@ -515,6 +515,34 @@ function ProductCard({ product, onOpen }) {
 
 function ProductGrid({ products, bg }) {
   const [activeProduct, setActiveProduct] = useState(null);
+  const location = useLocation();
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    if (products.length > 0 && location.state?.autoOpenProduct) {
+      const targetName = location.state.autoOpenProduct;
+      const cleanTarget = targetName.toLowerCase().replace(/combo|set|edition/g, "").replace(/\s+/g, " ").trim();
+      
+      const matchedProduct = products.find(p => {
+        const cleanPName = p.name.toLowerCase().replace(/combo|set|edition/g, "").replace(/\s+/g, " ").trim();
+        return cleanPName.includes(cleanTarget) || cleanTarget.includes(cleanPName);
+      });
+
+      if (matchedProduct) {
+        setActiveProduct(matchedProduct);
+
+        setTimeout(() => {
+          gridRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 400);
+
+        try {
+          window.history.replaceState(null, '');
+        } catch (e) {
+          console.warn("Failed to clear navigation state:", e);
+        }
+      }
+    }
+  }, [products, location.state]);
 
   if (!products.length) {
     return (
@@ -537,7 +565,7 @@ function ProductGrid({ products, bg }) {
 
   return (
     <>
-      <div style={{ background: bg }}>
+      <div ref={gridRef} style={{ background: bg }}>
         <div className="volente-grid">
           {products.map((product) => (
             <ProductCard
