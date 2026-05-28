@@ -101,7 +101,7 @@ const PerfumeCreation = () => {
           <div className="absolute bottom-0 w-full h-2/3 bg-gradient-to-t from-[#c9a96e]/40 to-transparent animate-pulse" />
           {/* Label */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-20 border border-[#c9a96e]/40 flex items-center justify-center text-[#c9a96e]">
-            <span className="text-[8px] uppercase tracking-[0.3em] font-light rotate-90">VOLENTE</span>
+            <span className="text-[8px] uppercase tracking-[0.3em] font-light rotate-90">VOLONTE</span>
           </div>
         </div>
         {/* Cap */}
