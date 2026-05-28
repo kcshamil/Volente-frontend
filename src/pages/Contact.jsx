@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 
 const SHOP_PHONE  = "+91 8891163878";
-const SHOP_EMAIL  = "hello@volente.in";
+const SHOP_EMAIL  = "volentefragrances@gmail.com";
 const SHOP_ADDRESS = "Manjeri, Kerala";
 const WHATSAPP_NO = "918891163878";
 

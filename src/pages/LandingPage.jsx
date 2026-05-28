@@ -587,19 +587,19 @@ function LandingPage() {
           {[
             {
               name: "Layam Edition",
-              price: "2,499",
+              price: "400",
               // ✅ CLIENT IMAGE: Layam stone shot
               img: siteContent.latestDrop1Image,
             },
             {
-              name: "Luxury 8ml Set",
-              price: "1,299",
+              name: "Luxury 8ml Combo Set ",
+              price: "299",
               // ✅ CLIENT IMAGE: coloured 8ml bottles
               img: siteContent.latestDrop2Image,
             },
             {
-              name: "Premium Dark Set",
-              price: "1,499",
+              name: "Premium Dark Combo Set",
+              price: "299",
               // ✅ CLIENT IMAGE: dark 8ml bottles
               img: siteContent.latestDrop3Image,
             },
@@ -625,7 +625,7 @@ function LandingPage() {
             </div>
             <div>
               <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Layam Edition</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 2,499</p>
+              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 400</p>
             </div>
           </div>
 
@@ -635,15 +635,15 @@ function LandingPage() {
               <img src="/Lp8ml.jpeg" alt="Luxury 8ml Set" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
             </div>
             <div className="text-center">
-              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Luxury 8ml Set</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 1,299</p>
+              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Luxury 8ml Combo Set</p>
+              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 mt-16">
             <div className="text-right">
-              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Premium Dark Set</p>
-              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 1,499</p>
+              <p className="text-xs font-medium text-[#2c2c2c] uppercase tracking-wide">Premium Dark Combo Set</p>
+              <p className="text-[11px] text-[#a89880] mt-0.5">Rs. 299</p>
             </div>
             {/* ✅ CLIENT IMAGE: Dark 8ml set */}
             <div className="h-[280px] rounded-2xl overflow-hidden">

@@ -12,7 +12,7 @@ import {
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 const SHOP_PHONE = "+91 8891163878";
-const SHOP_EMAIL = "hello@volente.in";
+const SHOP_EMAIL = "volentefragrances@gmail.com";
 const SHOP_ADDRESS = "Manjeri, Kerala";
 const WHATSAPP_NO = "918891163878";
 const INSTAGRAM_URL = "https://www.instagram.com/volontefragrance?igsh=MTd3NnE1NDBkbHZ5bw==";
