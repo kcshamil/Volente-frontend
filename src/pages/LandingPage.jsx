@@ -396,8 +396,7 @@ function LandingPage() {
               path: "/men",
               btn: "Shop Men",
               overlay: "bg-black/35",
-              // ✅ CLIENT IMAGE: dark 8ml bottles
-              img: "/Lp8ml2.jpeg",
+              img: siteContent.menImage,
             },
             {
               label: "Unisex",
@@ -406,8 +405,7 @@ function LandingPage() {
               btn: "Shop Unisex",
               overlay: "bg-black/40",
               badge: "New",
-              // ✅ CLIENT IMAGE: coloured 8ml bottles
-              img: "/Lp8ml.jpeg",
+              img: siteContent.unisexImage,
             },
             {
               label: "Women",
@@ -415,7 +413,7 @@ function LandingPage() {
               path: "/women",
               btn: "Shop Women",
               overlay: "bg-black/30",
-              img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
+              img: siteContent.womenImage,
             },
           ].map(({ label, sub, path, btn, overlay, badge, img }) => (
             <div
@@ -697,7 +695,7 @@ function LandingPage() {
                 }`}
               >
                 <div className="h-[420px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
-                  <img src="/V3.jpeg" alt="Layam Edition" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  <img src={siteContent.latestDrop1Image} alt="Layam Edition" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
                   {!isAvailable && (
                     <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
                       <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
@@ -730,7 +728,7 @@ function LandingPage() {
                 }`}
               >
                 <div className="h-[480px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
-                  <img src="/Lp8ml.jpeg" alt="Luxury 8ml Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  <img src={siteContent.latestDrop2Image} alt="Luxury 8ml Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
                   {!isAvailable && (
                     <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
                       <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
@@ -761,7 +759,7 @@ function LandingPage() {
                 }`}
               >
                 <div className="h-[400px] rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-all relative">
-                  <img src="/Lp8ml2.jpeg" alt="Premium Dark Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
+                  <img src={siteContent.latestDrop3Image} alt="Premium Dark Set" className={`w-full h-full object-cover transition-transform duration-700 ${isAvailable ? "group-hover:scale-105" : ""}`} />
                   {!isAvailable && (
                     <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px] flex items-center justify-center">
                       <span className="text-[9px] tracking-[0.3em] text-[#c9a96e] uppercase font-bold bg-black/65 px-3 py-1 rounded-full border border-[#c9a96e]/30">Aging in Cellar</span>
@@ -786,18 +784,35 @@ function LandingPage() {
       {/* QUOTE BANNER */}
       <section
         ref={(el) => (sectionsRef.current[8] = el)}
-        className="relative w-full py-16 md:py-20 px-6 flex items-center justify-center"
-        style={{ background: "linear-gradient(135deg, #2c2c2c 0%, #4a3f35 100%)" }}
+        className="relative w-full py-24 md:py-32 px-6 flex items-center justify-center overflow-hidden"
       >
-        <div className="text-center z-10 max-w-xs md:max-w-3xl mx-auto">
-          <p className="text-[9px] tracking-[0.4em] uppercase text-[#a89880] mb-6">The Volonté Philosophy</p>
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          style={{ opacity: 0.35 }}
+        >
+          <source src="/6764959-uhd_3840_2160_25fps.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Luxury dark gradient overlay for text readability */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{ background: "linear-gradient(to bottom, rgba(44, 44, 44, 0.85) 0%, rgba(74, 63, 53, 0.8) 100%)" }}
+        />
+
+        <div className="text-center z-10 max-w-xs md:max-w-3xl mx-auto relative">
+          <p className="text-[9px] tracking-[0.4em] uppercase text-[#c9a96e] mb-6 font-semibold">The Volonté Philosophy</p>
           <h2
-            className="text-2xl md:text-6xl font-light text-white leading-relaxed"
+            className="text-2xl md:text-6xl font-light text-white leading-relaxed tracking-wide"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             "A fragrance is the invisible part of your personality."
           </h2>
-          <div className="w-10 h-[1px] bg-[#a89880] mx-auto mt-8" />
+          <div className="w-10 h-[1px] bg-[#c9a96e] mx-auto mt-8" />
         </div>
       </section>
 
