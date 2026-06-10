@@ -101,8 +101,22 @@ const FALLBACK_PERFUMES = [
 ];
 
 function usePerfumes() {
-  const [perfumes, setPerfumes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [perfumes, setPerfumes] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_perfumes");
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_perfumes");
+      return cached ? false : true;
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
     const fetchPerfumes = async () => {
@@ -111,12 +125,17 @@ function usePerfumes() {
         const list = res.data?.data || res.data;
         if (Array.isArray(list) && list.length > 0) {
           setPerfumes(list);
+          localStorage.setItem("volente_perfumes", JSON.stringify(list));
         } else {
-          setPerfumes(FALLBACK_PERFUMES);
+          if (perfumes.length === 0) {
+            setPerfumes(FALLBACK_PERFUMES);
+          }
         }
       } catch (err) {
         console.error("Error fetching perfumes, using fallbacks:", err);
-        setPerfumes(FALLBACK_PERFUMES);
+        if (perfumes.length === 0) {
+          setPerfumes(FALLBACK_PERFUMES);
+        }
       } finally {
         setLoading(false);
       }

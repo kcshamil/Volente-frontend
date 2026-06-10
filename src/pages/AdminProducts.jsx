@@ -165,6 +165,7 @@ export default function AdminProducts() {
     try {
       await axios.delete(`${API_URL}/perfumes/${id}`, getAuthConfig());
       setProducts((prev) => prev.filter((p) => p._id !== id));
+      localStorage.removeItem("volente_perfumes");
     } catch (err) {
       console.error(err);
 
@@ -228,6 +229,7 @@ export default function AdminProducts() {
         await axios.post(`${API_URL}/perfumes`, payload, getAuthConfig());
       }
 
+      localStorage.removeItem("volente_perfumes");
       resetForm();
       fetchProducts();
     } catch (err) {

@@ -12,15 +12,15 @@ import {
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 const SHOP_PHONE = "+91 8891163878";
-const SHOP_EMAIL = "volentefragrances@gmail.com";
+const SHOP_EMAIL = "volontefragrances@gmail.com";
 const SHOP_ADDRESS = "Manjeri, Kerala";
 const WHATSAPP_NO = "918891163878";
 const INSTAGRAM_URL = "https://www.instagram.com/volontefragrance?igsh=MTd3NnE1NDBkbHZ5bw==";
-const FACEBOOK_URL = "https://facebook.com/volente";
+
 
 export default function Footer() {
   const whatsappMessage = encodeURIComponent(
-    "Hi! I would like to know more about Volonté perfumes."
+    "Hi! I would like to know more about Volente perfumes."
   );
 
   return (
@@ -45,7 +45,7 @@ export default function Footer() {
       <div className="bg-[#f5f0eb] text-[#2c2c2c] px-5 py-12">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-[9px] uppercase tracking-[0.35em] text-[#a89880] mb-3">
-            Join The Volonté Circle
+            Join The Volente Circle
           </p>
 
           <h2
@@ -63,7 +63,7 @@ export default function Footer() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Thank you for subscribing to Volonté.");
+              alert("Thank you for subscribing to Volente.");
             }}
             className="mx-auto max-w-md flex flex-col sm:flex-row gap-3"
           >
@@ -90,7 +90,7 @@ export default function Footer() {
             className="text-[30px] font-light tracking-[0.28em] leading-none"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            VOLONTÉ
+            VOLENTE
           </h2>
 
           <p className="text-[8px] tracking-[0.4em] text-[#a89880] uppercase mt-2">
@@ -223,7 +223,7 @@ export default function Footer() {
 
       <div className="mx-auto max-w-6xl px-6 py-6 flex flex-col lg:flex-row items-center justify-between gap-4">
         <p className="text-[10px] text-[#657272] tracking-wide text-center">
-          © {new Date().getFullYear()} Volonté. All rights reserved.
+          © {new Date().getFullYear()} Volenté. All rights reserved.
         </p>
 
 

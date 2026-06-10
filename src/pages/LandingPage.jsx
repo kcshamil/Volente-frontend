@@ -35,8 +35,22 @@ function LandingPage() {
   const [theme, setTheme] = useState(() => localStorage.getItem("volente_theme") || "light");
   const [isSpraying, setIsSpraying] = useState(false);
 
-  const [siteContent, setSiteContent] = useState(defaultSiteContent);
-  const [perfumes, setPerfumes] = useState([]);
+  const [siteContent, setSiteContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_site_content");
+      return cached ? JSON.parse(cached) : defaultSiteContent;
+    } catch {
+      return defaultSiteContent;
+    }
+  });
+  const [perfumes, setPerfumes] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_perfumes");
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
@@ -54,10 +68,13 @@ function LandingPage() {
     const fetchSiteContent = async () => {
       try {
         const res = await axios.get(`${API_URL}/site-content`);
-        setSiteContent({
+        const data = res.data?.data || {};
+        const newContent = {
           ...defaultSiteContent,
-          ...(res.data?.data || {}),
-        });
+          ...data,
+        };
+        setSiteContent(newContent);
+        localStorage.setItem("volente_site_content", JSON.stringify(newContent));
       } catch (err) {
         console.error("Failed to fetch site content:", err);
       }
@@ -69,6 +86,7 @@ function LandingPage() {
         const list = res.data?.data || res.data;
         if (Array.isArray(list)) {
           setPerfumes(list);
+          localStorage.setItem("volente_perfumes", JSON.stringify(list));
         }
       } catch (err) {
         console.error("Failed to fetch perfumes:", err);

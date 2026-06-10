@@ -90,6 +90,7 @@ export default function AdminSiteContent() {
   const handleSave = async () => {
     try {
       await axios.put(`${API_URL}/site-content`, content, getAuthConfig());
+      localStorage.setItem("volente_site_content", JSON.stringify(content));
       alert("Site images updated successfully");
     } catch (err) {
       console.error(err);
