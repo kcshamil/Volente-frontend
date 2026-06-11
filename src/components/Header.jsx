@@ -6,6 +6,7 @@ const CART_KEY = "volente_cart";
 
 const navLinks = [
   { label: "Home", path: "/" },
+  { label: "About", path: "/about" },
   { label: "Men", path: "/men" },
   { label: "Women", path: "/women" },
   { label: "Unisex", path: "/unisex" },

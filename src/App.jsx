@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
+import About from "./pages/About";
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -36,6 +37,7 @@ function App() {
         <Route path="/my-orders" element={<><Header /><MyOrders /><Footer /></>} />
         <Route path="/order-success" element={<><Header /><OrderSuccess /><Footer /></>} />
         <Route path="/contact" element={<><Header /><Contact /><Footer /></>} />
+        <Route path="/about" element={<><Header /><About /><Footer /></>} />
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLogin />} />

@@ -156,6 +156,7 @@ export default function Footer() {
 
           <div className="flex flex-col gap-3">
             {[
+              { label: "About Us", path: "/about" },
               { label: "Track My Order", path: "/my-orders" },
               { label: "How to Order", path: "/checkout" },
               { label: "Contact Us", path: "/contact" },
