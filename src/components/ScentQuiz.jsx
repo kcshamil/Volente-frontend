@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { X, ChevronRight, RefreshCw, ShoppingBag, Heart } from 'lucide-react';
 import gsap from 'gsap';
+import { addToCart } from './Products';
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -33,6 +35,7 @@ const FALLBACK_PERFUMES = [
 ];
 
 const ScentQuiz = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -124,10 +127,10 @@ const ScentQuiz = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <div className="bg-[#f5f0eb] w-full max-w-xl rounded-[32px] overflow-hidden shadow-2xl relative min-h-[500px] flex flex-col">
+      <div className="bg-[#f5f0eb] w-full max-w-xl rounded-[32px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col">
 
         {/* Header */}
-        <div className="p-6 flex justify-between items-center border-b border-[#ede7df]">
+        <div className="p-6 flex justify-between items-center border-b border-[#ede7df] shrink-0">
           <div className="flex flex-col">
             <p className="text-[9px] uppercase tracking-[0.3em] text-[#a89880]">Scent Discovery</p>
             <h2 className="text-xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Find Your Signature</h2>
@@ -138,75 +141,83 @@ const ScentQuiz = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-8 flex flex-col justify-center">
-          {!result && !loading && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="space-y-2">
-                <p className="text-xs text-[#a89880]">Step {step + 1} of {questions.length}</p>
-                <h3 className="text-2xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                  {questions[step].question}
-                </h3>
-              </div>
+        <div className="flex-1 p-5 md:p-8 overflow-y-auto flex flex-col">
+          <div className="my-auto w-full flex flex-col justify-center">
+            {!result && !loading && (
+              <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="space-y-2">
+                  <p className="text-xs text-[#a89880]">Step {step + 1} of {questions.length}</p>
+                  <h3 className="text-2xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                    {questions[step].question}
+                  </h3>
+                </div>
 
-              <div className="grid gap-3">
-                {questions[step].options.map((opt) => (
+                <div className="grid gap-3">
+                  {questions[step].options.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => handleAnswer(opt.value)}
+                      className="group flex items-center justify-between p-4 md:p-5 rounded-2xl bg-white border border-[#ede7df] hover:border-[#2c2c2c] hover:bg-white transition-all text-left"
+                    >
+                      <span className="text-sm text-[#7a6e65] group-hover:text-[#2c2c2c] transition-colors">{opt.label}</span>
+                      <ChevronRight size={16} className="text-[#ede7df] group-hover:text-[#2c2c2c] transition-all transform group-hover:translate-x-1" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {loading && (
+              <div className="flex flex-col items-center justify-center space-y-6 py-8 md:py-12">
+                <div className="relative">
+                  <RefreshCw size={48} className="text-[#c9a96e] animate-spin" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#f5f0eb] to-transparent" />
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-[#a89880] mb-2 animate-pulse">Analyzing Preferences</p>
+                  <h3 className="text-xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Curating Your Perfect Scent...</h3>
+                </div>
+              </div>
+            )}
+
+            {result && !loading && (
+              <div className="animate-in zoom-in-95 fade-in duration-700 flex flex-col items-center text-center space-y-4 md:space-y-5">
+                <div className="w-36 h-48 md:w-40 md:h-52 rounded-2xl overflow-hidden shadow-xl bg-white border-4 border-white">
+                  <img src={result.img} alt={result.name} className="w-full h-full object-cover" />
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-[#c9a96e] font-bold">Your Match Found</p>
+                  <h3 className="text-2xl md:text-3xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{result.name}</h3>
+                  <p className="text-xs md:text-sm text-[#7a6e65] max-w-xs mx-auto">{result.description}</p>
+                </div>
+
+                <div className="flex gap-4 w-full max-w-xs">
                   <button
-                    key={opt.value}
-                    onClick={() => handleAnswer(opt.value)}
-                    className="group flex items-center justify-between p-5 rounded-2xl bg-white border border-[#ede7df] hover:border-[#2c2c2c] hover:bg-white transition-all text-left"
+                    onClick={() => {
+                      const size = result.sizes?.[0] || "8ml";
+                      const productToCart = {
+                        ...result,
+                        price: result.price || 1499,
+                      };
+                      addToCart(productToCart, size, 1);
+                      onClose();
+                      navigate("/checkout");
+                    }}
+                    className="flex-1 bg-[#2c2c2c] text-white py-3 md:py-4 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#1a1a1a] transition-all"
                   >
-                    <span className="text-sm text-[#7a6e65] group-hover:text-[#2c2c2c] transition-colors">{opt.label}</span>
-                    <ChevronRight size={16} className="text-[#ede7df] group-hover:text-[#2c2c2c] transition-all transform group-hover:translate-x-1" />
+                    <ShoppingBag size={14} /> Buy Now
                   </button>
-                ))}
+                  <button
+                    onClick={() => { setStep(0); setResult(null); }}
+                    className="p-3 md:p-4 rounded-xl border border-[#ede7df] text-[#a89880] hover:bg-white transition-all"
+                  >
+                    <RefreshCw size={18} />
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-
-          {loading && (
-            <div className="flex flex-col items-center justify-center space-y-6 py-12">
-              <div className="relative">
-                <RefreshCw size={48} className="text-[#c9a96e] animate-spin" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#f5f0eb] to-transparent" />
-              </div>
-              <div className="text-center">
-                <p className="text-[10px] uppercase tracking-[0.4em] text-[#a89880] mb-2 animate-pulse">Analyzing Preferences</p>
-                <h3 className="text-xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Curating Your Perfect Scent...</h3>
-              </div>
-            </div>
-          )}
-
-          {result && !loading && (
-            <div className="animate-in zoom-in-95 fade-in duration-700 flex flex-col items-center text-center space-y-6">
-              <div className="w-48 h-64 rounded-2xl overflow-hidden shadow-xl bg-white border-4 border-white">
-                <img src={result.img} alt={result.name} className="w-full h-full object-cover" />
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-[10px] uppercase tracking-[0.4em] text-[#c9a96e] font-bold">Your Match Found</p>
-                <h3 className="text-3xl font-light text-[#2c2c2c]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{result.name}</h3>
-                <p className="text-sm text-[#7a6e65] max-w-xs mx-auto">{result.description}</p>
-              </div>
-
-              <div className="flex gap-4 w-full max-w-xs">
-                <button
-                  onClick={() => {
-                    // Add to cart logic would go here
-                    onClose();
-                  }}
-                  className="flex-1 bg-[#2c2c2c] text-white py-4 rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#1a1a1a] transition-all"
-                >
-                  <ShoppingBag size={14} /> Buy Now
-                </button>
-                <button
-                  onClick={() => { setStep(0); setResult(null); }}
-                  className="p-4 rounded-xl border border-[#ede7df] text-[#a89880] hover:bg-white transition-all"
-                >
-                  <RefreshCw size={18} />
-                </button>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Progress Bar */}
