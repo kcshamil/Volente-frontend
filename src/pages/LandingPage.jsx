@@ -584,12 +584,12 @@ function LandingPage() {
               img: siteContent.latestDrop1Image,
             },
             {
-              name: "Luxury 8ml Combo Set",
+              name: "Premium Dark Combo Set",
               price: "299",
               img: siteContent.latestDrop2Image,
             },
             {
-              name: "Premium Dark Combo Set",
+              name: "Luxury 8ml Combo Set",
               price: "299",
               img: siteContent.latestDrop3Image,
             },
@@ -669,7 +669,7 @@ function LandingPage() {
 
           {/* Card 2: Luxury 8ml Combo Set */}
           {(() => {
-            const name = "Luxury 8ml Combo Set";
+            const name = "Premium Dark Combo Set";
             const matched = getMatchedProduct(name);
             const isAvailable = !!matched;
             return (
@@ -700,7 +700,7 @@ function LandingPage() {
 
           {/* Card 3: Premium Dark Combo Set */}
           {(() => {
-            const name = "Premium Dark Combo Set";
+            const name = "Luxury 8ml Combo Set";
             const matched = getMatchedProduct(name);
             const isAvailable = !!matched;
             return (
