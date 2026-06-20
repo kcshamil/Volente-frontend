@@ -135,6 +135,11 @@ function usePerfumes() {
     };
 
     fetchPerfumes();
+
+    window.addEventListener("refetchPerfumes", fetchPerfumes);
+    return () => {
+      window.removeEventListener("refetchPerfumes", fetchPerfumes);
+    };
   }, []);
 
   useEffect(() => {
@@ -211,31 +216,50 @@ function StarRating({ rating, reviews }) {
 }
 
 export function ProductModal({ product, onClose }) {
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(product?._preselectedSize || null);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const overlayRef = useRef(null);
   const navigate = useNavigate();
 
-  const sizes = product?.sizes || ALL_SIZES;
+  const [currentProduct, setCurrentProduct] = useState(product);
+  const [reviewsList, setReviewsList] = useState(product?.reviewsList || []);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const sizes = currentProduct?.sizes || ALL_SIZES;
 
   useEffect(() => {
-    setSelectedSize(product?._preselectedSize || null);
-    setQty(1);
-    setAdded(false);
     document.body.style.overflow = "hidden";
+
+    if (product?._id) {
+      axios.get(`${API_URL}/perfumes/${product._id}`)
+        .then(res => {
+          if (res.data?.success && res.data?.data) {
+            setCurrentProduct(res.data.data);
+            setReviewsList(res.data.data.reviewsList || []);
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching perfume details:", err);
+        });
+    }
 
     return () => {
       document.body.style.overflow = "";
     };
-  }, [product]);
+  }, [product?._id]);
 
   if (!product) return null;
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
 
-    addToCart(product, selectedSize, qty);
+    addToCart(currentProduct, selectedSize, qty);
     setAdded(true);
 
     setTimeout(() => {
@@ -248,12 +272,56 @@ export function ProductModal({ product, onClose }) {
   const handleBuyNow = () => {
     if (!selectedSize) return;
 
-    addToCart(product, selectedSize, qty);
+    addToCart(currentProduct, selectedSize, qty);
     onClose();
     navigate("/checkout");
   };
 
-  const tagStyle = TAG_STYLES[product.tag] || TAG_STYLES.default;
+  const handleSubmitReview = async () => {
+    if (!reviewerName.trim()) {
+      setSubmitError("Please enter your name.");
+      return;
+    }
+    if (!reviewComment.trim()) {
+      setSubmitError("Please write a comment.");
+      return;
+    }
+
+    setSubmitLoading(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
+
+    try {
+      const res = await axios.post(`${API_URL}/perfumes/${product._id}/reviews`, {
+        name: reviewerName,
+        rating: reviewRating,
+        comment: reviewComment,
+      });
+
+      if (res.data?.success && res.data?.data) {
+        setSubmitSuccess(true);
+        setReviewerName("");
+        setReviewRating(5);
+        setReviewComment("");
+        
+        // Update local details
+        setCurrentProduct(res.data.data);
+        setReviewsList(res.data.data.reviewsList || []);
+        
+        // Notify parent grid
+        window.dispatchEvent(new Event("refetchPerfumes"));
+      } else {
+        setSubmitError(res.data?.message || "Failed to submit review.");
+      }
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      setSubmitError(err.response?.data?.message || "Failed to submit review. Please try again.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  const tagStyle = TAG_STYLES[currentProduct.tag] || TAG_STYLES.default;
 
   return createPortal(
     <div
@@ -274,24 +342,24 @@ export function ProductModal({ product, onClose }) {
         <div className="overflow-y-auto flex-1 min-h-0">
           <div className="relative h-[160px] bg-[#ede7df] flex items-center justify-center">
             <img
-              src={product.img}
-              alt={product.name}
+              src={currentProduct.img}
+              alt={currentProduct.name}
               className="w-full h-full object-contain"
             />
 
-            {product.tag && (
+            {currentProduct.tag && (
               <span
                 style={tagStyle}
                 className="absolute top-3 left-3 text-[9px] uppercase tracking-widest px-3 py-1 rounded-full"
               >
-                {product.tag}
+                {currentProduct.tag}
               </span>
             )}
           </div>
 
           <div className="p-4">
             <p className="text-[10px] uppercase tracking-widest text-[#a89880] mb-1">
-              {product.category} · Eau de Parfum
+              {currentProduct.category} · Eau de Parfum
             </p>
 
             <div className="flex justify-between gap-3 mb-2">
@@ -299,24 +367,24 @@ export function ProductModal({ product, onClose }) {
                 className="text-2xl font-light text-[#1a1a1a] leading-tight"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
-                {product.name}
+                {currentProduct.name}
               </h2>
 
               <p
                 className="text-xl font-light text-[#1a1a1a] shrink-0"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
-                ₹{Number(product.price).toLocaleString("en-IN")}
+                ₹{Number(currentProduct.price).toLocaleString("en-IN")}
               </p>
             </div>
 
-            {product.rating && (
-              <StarRating rating={product.rating} reviews={product.reviews} />
-            )}
+            {(currentProduct.rating || currentProduct.reviews > 0) ? (
+              <StarRating rating={currentProduct.rating} reviews={currentProduct.reviews} />
+            ) : null}
 
-            {product.description && (
+            {currentProduct.description && (
               <p className="text-xs text-[#7a6e65] leading-relaxed mt-2">
-                {product.description}
+                {currentProduct.description}
               </p>
             )}
 
@@ -364,6 +432,127 @@ export function ProductModal({ product, onClose }) {
               >
                 <Plus size={14} />
               </button>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="h-px bg-[#ede7df] my-5" />
+
+            <div className="space-y-4">
+              <h3 className="text-base font-light text-[#1a1a1a]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                Customer Reviews ({reviewsList.length})
+              </h3>
+
+              {/* Reviews List */}
+              <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                {reviewsList.length === 0 ? (
+                  <p className="text-[11px] text-[#a89880] italic py-2">
+                    No reviews yet. Be the first to share your thoughts!
+                  </p>
+                ) : (
+                  reviewsList.map((rev) => (
+                    <div key={rev._id} className="p-3 bg-white/50 border border-[#ede7df]/50 rounded-xl flex flex-col gap-1">
+                      <div className="flex justify-between items-start">
+                        <span className="text-xs font-semibold text-[#2c2c2c]">{rev.name}</span>
+                        <span className="text-[9px] text-[#a89880]">
+                          {new Date(rev.createdAt).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex gap-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={9}
+                            fill={star <= rev.rating ? "#c9a96e" : "transparent"}
+                            color={star <= rev.rating ? "#c9a96e" : "#d8cfc4"}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs text-[#7a6e65] mt-1 leading-relaxed">{rev.comment}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Review Submit Form */}
+              <div className="bg-[#ede7df]/40 p-4 rounded-xl border border-[#ede7df]/80 space-y-3">
+                <h4 className="text-xs font-semibold text-[#2c2c2c]">Write a Review</h4>
+                
+                {submitSuccess && (
+                  <p className="text-[11px] text-green-600 font-medium">
+                    Thank you! Your feedback has been submitted.
+                  </p>
+                )}
+                
+                {submitError && (
+                  <p className="text-[11px] text-red-500 font-medium">
+                    {submitError}
+                  </p>
+                )}
+
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[9px] uppercase tracking-wider text-[#a89880] block mb-1">
+                        Your Name
+                      </label>
+                      <input
+                        type="text"
+                        value={reviewerName}
+                        onChange={(e) => setReviewerName(e.target.value)}
+                        placeholder="John Doe"
+                        className="w-full text-xs px-3 py-2 bg-white rounded-lg border border-[#d5ccc3] focus:border-[#2c2c2c] outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] uppercase tracking-wider text-[#a89880] block mb-1">
+                        Rating
+                      </label>
+                      <div className="flex items-center h-8 gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setReviewRating(star)}
+                            className="p-1 hover:scale-110 transition-transform cursor-pointer"
+                          >
+                            <Star
+                              size={16}
+                              fill={star <= reviewRating ? "#c9a96e" : "transparent"}
+                              color={star <= reviewRating ? "#c9a96e" : "#d8cfc4"}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[9px] uppercase tracking-wider text-[#a89880] block mb-1">
+                      Comment
+                    </label>
+                    <textarea
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Share your experience with this scent..."
+                      rows="2"
+                      className="w-full text-xs px-3 py-2 bg-white rounded-lg border border-[#d5ccc3] focus:border-[#2c2c2c] outline-none resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSubmitReview}
+                    disabled={submitLoading}
+                    className="w-full py-2 bg-[#2c2c2c] text-white text-[9px] uppercase tracking-widest font-semibold rounded-lg hover:bg-black transition-colors disabled:opacity-50"
+                  >
+                    {submitLoading ? "Submitting..." : "Submit Review"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -591,6 +780,7 @@ function ProductGrid({ products, bg }) {
 
       {activeProduct && (
         <ProductModal
+          key={activeProduct._id}
           product={activeProduct}
           onClose={() => setActiveProduct(null)}
         />
