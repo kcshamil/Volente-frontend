@@ -18,6 +18,7 @@ const fields = [
   ["menImage", "Men Section Image"],
   ["womenImage", "Women Section Image"],
   ["unisexImage", "Unisex Section Image"],
+  ["carImage", "Car Section Image"],
   ["giftImage", "Gift Section Image"],
   ["latestDrop1Image", "Latest Drop 1"],
   ["latestDrop2Image", "Latest Drop 2"],
