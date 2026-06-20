@@ -123,19 +123,12 @@ function usePerfumes() {
       try {
         const res = await axios.get(`${API_URL}/perfumes`);
         const list = res.data?.data || res.data;
-        if (Array.isArray(list) && list.length > 0) {
+        if (Array.isArray(list)) {
           setPerfumes(list);
           localStorage.setItem("volente_perfumes", JSON.stringify(list));
-        } else {
-          if (perfumes.length === 0) {
-            setPerfumes(FALLBACK_PERFUMES);
-          }
         }
       } catch (err) {
-        console.error("Error fetching perfumes, using fallbacks:", err);
-        if (perfumes.length === 0) {
-          setPerfumes(FALLBACK_PERFUMES);
-        }
+        console.error("Error fetching perfumes:", err);
       } finally {
         setLoading(false);
       }
