@@ -135,6 +135,7 @@ export default function Footer() {
               { label: "Men's Fragrances", path: "/men" },
               { label: "Women's Fragrances", path: "/women" },
               { label: "Unisex Collection", path: "/unisex" },
+              { label: "Car Fragrances", path: "/car" },
               { label: "Gift Collection", path: "/unisex" },
               { label: "Latest Drops", path: "/" },
             ].map(({ label, path }) => (

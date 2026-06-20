@@ -1,7 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { WomenCards } from "../components/Products";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const defaultSiteContent = {
+  menImage: "/Lp8ml2.jpeg",
+  womenImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
+  unisexImage: "/Lp8ml.jpeg",
+  carImage: "/Firefly_Gemini Flash_Luxury product hangtag mockup, hanging from black _cord with gold eyelet, vertical st 221163.png",
+};
 
 
 function Women() {
@@ -11,6 +20,34 @@ function Women() {
   const btnRef       = useRef(null);
   const breadcrumbRef = useRef(null);
   const lineRef      = useRef(null);
+
+  const [siteContent, setSiteContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_site_content");
+      return cached ? JSON.parse(cached) : defaultSiteContent;
+    } catch {
+      return defaultSiteContent;
+    }
+  });
+
+  useEffect(() => {
+    const fetchSiteContent = async () => {
+      try {
+        const res = await fetch(`${API_URL}/site-content`);
+        const result = await res.json();
+        const data = result?.data || {};
+        const newContent = {
+          ...defaultSiteContent,
+          ...data,
+        };
+        setSiteContent(newContent);
+        localStorage.setItem("volente_site_content", JSON.stringify(newContent));
+      } catch (err) {
+        console.error("Failed to fetch site content:", err);
+      }
+    };
+    fetchSiteContent();
+  }, []);
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -199,27 +236,29 @@ function Women() {
       </section>
 
       {/* ── CROSS NAVIGATION ── */}
-      <section className="explore-more-section bg-[#f5f0eb] py-12 px-5" style={{ fontFamily: "Barlow, sans-serif" }}>
+      <section className="explore-more-section bg-[#f5f0eb] py-10 sm:py-12 px-4 sm:px-6" style={{ fontFamily: "Barlow, sans-serif" }}>
         <p className="text-center text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-8">Explore More</p>
-        <div className="flex gap-4 max-w-2xl mx-auto">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
           {[
             // ✅ CLIENT IMAGE: dark 8ml bottles for Men cross-nav
-            { label: "Men",    path: "/men",    img: "/Lp8ml2.jpeg" },
+            { label: "Men",    path: "/men",    img: siteContent.menImage },
             // ✅ CLIENT IMAGE: coloured 8ml bottles for Unisex cross-nav
-            { label: "Unisex", path: "/unisex", img: "/Lp8ml.jpeg" },
+            { label: "Unisex", path: "/unisex", img: siteContent.unisexImage },
+            // ✅ CLIENT IMAGE: Firefly design for Car cross-nav
+            { label: "Car",    path: "/car",    img: siteContent.carImage },
           ].map(({ label, path, img }) => (
             <div
               key={label}
               onClick={() => navigate(path)}
-              className="flex-1 relative rounded-2xl overflow-hidden h-36 cursor-pointer group"
+              className="relative rounded-2xl overflow-hidden h-28 sm:h-36 cursor-pointer group"
             >
               <img src={img} alt={label} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors duration-300" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <h3 className="text-2xl font-light uppercase tracking-widest text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2">
+                <h3 className="text-lg sm:text-2xl font-light uppercase tracking-widest text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                   {label}
                 </h3>
-                <span className="mt-2 text-[9px] tracking-widest uppercase text-white/60 border border-white/30 px-3 py-1 rounded-full">
+                <span className="mt-1.5 sm:mt-2 text-[8px] sm:text-[9px] tracking-widest uppercase text-white/60 border border-white/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
                   Shop →
                 </span>
               </div>

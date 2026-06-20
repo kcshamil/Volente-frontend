@@ -667,3 +667,16 @@ export function UnisexCards() {
     />
   );
 }
+
+export function CarCards() {
+  const { perfumes, loading } = usePerfumes();
+
+  if (loading) return <SkeletonGrid bg="#e2e8f0" />;
+
+  return (
+    <ProductGrid
+      products={perfumes.filter((p) => p.category === "Car")}
+      bg="#e2e8f0"
+    />
+  );
+}

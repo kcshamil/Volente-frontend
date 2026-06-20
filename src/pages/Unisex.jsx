@@ -1,7 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { UnisexCards } from "../components/Products";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const defaultSiteContent = {
+  menImage: "/Lp8ml2.jpeg",
+  womenImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
+  unisexImage: "/Lp8ml.jpeg",
+  carImage: "/Firefly_Gemini Flash_Luxury product hangtag mockup, hanging from black _cord with gold eyelet, vertical st 221163.png",
+};
 
 
 function Unisex() {
@@ -11,6 +20,34 @@ function Unisex() {
   const btnRef        = useRef(null);
   const breadcrumbRef = useRef(null);
   const lineRef       = useRef(null);
+
+  const [siteContent, setSiteContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem("volente_site_content");
+      return cached ? JSON.parse(cached) : defaultSiteContent;
+    } catch {
+      return defaultSiteContent;
+    }
+  });
+
+  useEffect(() => {
+    const fetchSiteContent = async () => {
+      try {
+        const res = await fetch(`${API_URL}/site-content`);
+        const result = await res.json();
+        const data = result?.data || {};
+        const newContent = {
+          ...defaultSiteContent,
+          ...data,
+        };
+        setSiteContent(newContent);
+        localStorage.setItem("volente_site_content", JSON.stringify(newContent));
+      } catch (err) {
+        console.error("Failed to fetch site content:", err);
+      }
+    };
+    fetchSiteContent();
+  }, []);
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -230,24 +267,26 @@ function Unisex() {
       </section>
 
       {/* ── CROSS NAVIGATION ── */}
-      <section className="explore-more-section" style={{ background: "#f5f0eb", padding: "36px 16px", fontFamily: "Barlow, sans-serif" }}>
-        <p style={{ textAlign: "center", fontSize: 9, letterSpacing: "0.35em", textTransform: "uppercase", color: "#a89880", marginBottom: 20 }}>Explore More</p>
-        <div style={{ display: "flex", gap: 12, maxWidth: 500, margin: "0 auto" }}>
+      <section className="explore-more-section bg-[#f5f0eb] py-10 sm:py-12 px-4 sm:px-6" style={{ fontFamily: "Barlow, sans-serif" }}>
+        <p className="text-center text-[9px] tracking-[0.35em] uppercase text-[#a89880] mb-8">Explore More</p>
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
           {[
             // ✅ CLIENT IMAGE: dark 8ml bottles for Men cross-nav
-            { label: "Men",   path: "/men",   img: "/Lp8ml2.jpeg" },
-            { label: "Women", path: "/women", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop" },
+            { label: "Men",   path: "/men",   img: siteContent.menImage },
+            { label: "Women", path: "/women", img: siteContent.womenImage },
+            // ✅ CLIENT IMAGE: Firefly design for Car cross-nav
+            { label: "Car",   path: "/car",   img: siteContent.carImage },
           ].map(({ label, path, img }) => (
             <div
               key={label}
               onClick={() => navigate(path)}
-              style={{ flex: 1, position: "relative", borderRadius: 16, overflow: "hidden", height: 120, cursor: "pointer" }}
+              className="relative rounded-2xl overflow-hidden h-28 sm:h-36 cursor-pointer group"
             >
-              <img src={img} alt={label} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.42)" }} />
-              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 300, textTransform: "uppercase", letterSpacing: "0.15em", color: "#fff" }}>{label}</h3>
-                <span style={{ marginTop: 6, fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.3)", padding: "3px 10px", borderRadius: 999 }}>Shop →</span>
+              <img src={img} alt={label} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors duration-300" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2">
+                <h3 className="text-lg sm:text-2xl font-light uppercase tracking-widest text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{label}</h3>
+                <span className="mt-1.5 sm:mt-2 text-[8px] sm:text-[9px] tracking-widest uppercase text-white/60 border border-white/30 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">Shop →</span>
               </div>
             </div>
           ))}

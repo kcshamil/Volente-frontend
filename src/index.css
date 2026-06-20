@@ -24,33 +24,53 @@
   }
 }
 
-.volente-grid > div {
+.volente-grid>div {
   transition: transform 0.12s ease;
 }
 
-.volente-grid > div:active {
+.volente-grid>div:active {
   transform: scale(0.96);
 }
 
 /* Modal Animations */
 @keyframes modal-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modal-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes modal-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes modal-slide-down {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
 }
 
 .animate-modal-fade-in {
@@ -210,13 +230,19 @@
   color: #a89880 !important;
 }
 
-.dark .men-pill, .dark .women-pill, .dark .unisex-pill {
+.dark .men-pill,
+.dark .women-pill,
+.dark .unisex-pill,
+.dark .car-pill {
   border-color: #2c2c2c !important;
   color: #a89880 !important;
   background-color: #1e1e1e !important;
 }
 
-.dark .men-pill:hover, .dark .women-pill:hover, .dark .unisex-pill:hover {
+.dark .men-pill:hover,
+.dark .women-pill:hover,
+.dark .unisex-pill:hover,
+.dark .car-pill:hover {
   background-color: #c9a96e !important;
   border-color: #c9a96e !important;
   color: #121212 !important;
@@ -273,4 +299,9 @@
   border-color: #c9a96e !important;
   color: #c9a96e !important;
   background-color: transparent !important;
+}
+
+.dark .bg-\[\#e2e8f0\] {
+  background-color: #0f172a !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
 }

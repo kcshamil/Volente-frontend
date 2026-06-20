@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Men", path: "/men" },
   { label: "Women", path: "/women" },
   { label: "Unisex", path: "/unisex" },
+  { label: "Car", path: "/car" },
   {
     label: (
       <span className="flex items-center gap-1">
@@ -127,7 +128,7 @@ export default function Header() {
                   VOLONTÉ
                 </span>
 
-                <span 
+                <span
                   className="text-[7.5px] uppercase tracking-[0.25em] mt-[2px] font-semibold"
                   style={{ color: "#c9a96e" }}
                 >
@@ -143,7 +144,7 @@ export default function Header() {
               <div className="w-8 h-8 bg-black rounded-[7px] flex items-center justify-center">
                 <span
                   className="text-[15px] font-light"
-                  style={{ 
+                  style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     color: "#c9a96e"
                   }}
@@ -163,7 +164,7 @@ export default function Header() {
                   VOLONTÉ
                 </span>
 
-                <span 
+                <span
                   className="text-[6.5px] uppercase tracking-[0.2em] mt-[1px] font-semibold"
                   style={{ color: "#c9a96e" }}
                 >
@@ -208,16 +209,14 @@ export default function Header() {
                 aria-label="View cart"
               >
                 <ShoppingBag
-                  className={`h-[18px] w-[18px] text-white ${
-                    cartBump ? "cart-bump" : ""
-                  }`}
+                  className={`h-[18px] w-[18px] text-white ${cartBump ? "cart-bump" : ""
+                    }`}
                 />
 
                 {cartCount > 0 && (
                   <span
-                    className={`absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-[#c8a97e] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none ${
-                      cartBump ? "cart-bump" : ""
-                    }`}
+                    className={`absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-[#c8a97e] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none ${cartBump ? "cart-bump" : ""
+                      }`}
                   >
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
@@ -244,9 +243,8 @@ export default function Header() {
       )}
 
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-[280px] bg-[#edf3f5] flex flex-col shadow-2xl transition-transform duration-300 ${
-          mobileOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 z-50 h-full w-[280px] bg-[#edf3f5] flex flex-col shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         style={{ fontFamily: "Barlow, sans-serif" }}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#d4dde2]">
@@ -254,7 +252,7 @@ export default function Header() {
             <div className="w-8 h-8 bg-black rounded-[7px] flex items-center justify-center">
               <span
                 className="text-[15px] font-light"
-                style={{ 
+                style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   color: "#c9a96e"
                 }}
@@ -274,7 +272,7 @@ export default function Header() {
                 VOLONTÉ
               </span>
 
-              <span 
+              <span
                 className="text-[6.5px] uppercase tracking-[0.2em] mt-[1px] font-semibold"
                 style={{ color: "#c9a96e" }}
               >

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronRight } from "lucide-react";
-import { MenCards, WomenCards, UnisexCards } from "../components/Products";
+import { MenCards, WomenCards, UnisexCards, CarCards } from "../components/Products";
 import SprayMist from "../components/SprayMist";
 import PerfumeCreation from "../components/PerfumeCreation";
 import ScentQuiz from "../components/ScentQuiz";
@@ -18,6 +18,7 @@ const defaultSiteContent = {
   womenImage:
     "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop",
   unisexImage: "/Lp8ml.jpeg",
+  carImage: "/Firefly_Gemini Flash_Luxury product hangtag mockup, hanging from black _cord with gold eyelet, vertical st 221163.png",
   giftImage: "/gift1.jpg",
   latestDrop1Image: "/V3.jpeg",
   latestDrop2Image: "/Lp8ml.jpeg",
@@ -354,7 +355,7 @@ function LandingPage() {
               label: "Men",
               sub: "Bold. Woody. Intense.",
               path: "/men",
-              btn: "Shop Men",
+              btn: "Shop",
               // ✅ CLIENT IMAGE: dark 8ml bottles — dark moody men aesthetic
               img: siteContent.menImage,
             },
@@ -362,7 +363,7 @@ function LandingPage() {
               label: "Unisex",
               sub: "Fresh. Modern. Free.",
               path: "/unisex",
-              btn: "Shop Unisex",
+              btn: "Shop",
               badge: "New",
               // ✅ CLIENT IMAGE: coloured 8ml bottles — vibrant unisex collection
               img: siteContent.unisexImage,
@@ -371,8 +372,16 @@ function LandingPage() {
               label: "Women",
               sub: "Floral. Soft. Timeless.",
               path: "/women",
-              btn: "Shop Women",
+              btn: "Shop",
               img: siteContent.womenImage,
+            },
+            {
+              label: "Car",
+              sub: "Sleek. Leather. Fresh.",
+              path: "/car",
+              btn: "Shop",
+              badge: "New",
+              img: siteContent.carImage,
             },
           ].map(({ label, sub, path, btn, badge, img }) => (
             <div
@@ -406,13 +415,13 @@ function LandingPage() {
         </div>
 
         {/* DESKTOP */}
-        <div className="hidden md:grid grid-cols-3 h-[80vh]">
+        <div className="hidden md:grid grid-cols-4 h-[80vh]">
           {[
             {
               label: "Men",
               sub: "Bold. Woody. Intense.",
               path: "/men",
-              btn: "Shop Men",
+              btn: "Shop",
               overlay: "bg-black/35",
               img: siteContent.menImage,
             },
@@ -420,7 +429,7 @@ function LandingPage() {
               label: "Unisex",
               sub: "Fresh. Modern. Free.",
               path: "/unisex",
-              btn: "Shop Unisex",
+              btn: "Shop",
               overlay: "bg-black/40",
               badge: "New",
               img: siteContent.unisexImage,
@@ -429,9 +438,18 @@ function LandingPage() {
               label: "Women",
               sub: "Floral. Soft. Timeless.",
               path: "/women",
-              btn: "Shop Women",
+              btn: "Shop",
               overlay: "bg-black/30",
               img: siteContent.womenImage,
+            },
+            {
+              label: "Car",
+              sub: "Sleek. Leather. Fresh.",
+              path: "/car",
+              btn: "Shop",
+              overlay: "bg-black/35",
+              badge: "New",
+              img: siteContent.carImage,
             },
           ].map(({ label, sub, path, btn, overlay, badge, img }) => (
             <div
@@ -515,6 +533,22 @@ function LandingPage() {
           </button>
         </div>
         <UnisexCards />
+      </section>
+
+      {/* CAR PRODUCTS */}
+      <section ref={(el) => (sectionsRef.current[10] = el)} className="bg-[#e2e8f0] overflow-hidden">
+        <div className="px-5 pt-7 pb-2 flex items-center justify-between">
+          <div>
+            <p className="text-[9px] tracking-[0.25em] uppercase text-[#a89880] mb-1">On The Road — 2026</p>
+            <h2 className="text-2xl md:text-4xl font-light text-[#2c2c2c] leading-none" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              Car Fragrances
+            </h2>
+          </div>
+          <button onClick={() => navigate("/car")} className="rounded-full border border-[#2c2c2c] px-4 py-2 text-[9px] uppercase tracking-widest text-[#2c2c2c] whitespace-nowrap">
+            View All
+          </button>
+        </div>
+        <CarCards />
       </section>
 
       {/* FEATURED DROPS */}

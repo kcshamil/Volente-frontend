@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Men from "./pages/Men";
 import Women from "./pages/Women";
 import Unisex from "./pages/Unisex";
+import Car from "./pages/Car";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -33,6 +34,7 @@ function App() {
         <Route path="/men" element={<><Header /><Men /><Footer /></>} />
         <Route path="/women" element={<><Header /><Women /><Footer /></>} />
         <Route path="/unisex" element={<><Header /><Unisex /><Footer /></>} />
+        <Route path="/car" element={<><Header /><Car /><Footer /></>} />
         <Route path="/checkout" element={<><Header /><Checkout /><Footer /></>} />
         <Route path="/my-orders" element={<><Header /><MyOrders /><Footer /></>} />
         <Route path="/order-success" element={<><Header /><OrderSuccess /><Footer /></>} />
@@ -45,7 +47,7 @@ function App() {
         <Route
           path="/admin/site-content"
           element={
-            <ProtectedRoute>  
+            <ProtectedRoute>
               <AdminSiteContent />
             </ProtectedRoute>
           }
