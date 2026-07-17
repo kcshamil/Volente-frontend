@@ -105,10 +105,8 @@ export default function AdminProducts() {
       tag: product.tag || "",
       rating: product.rating || 4.5,
       reviews: product.reviews || 0,
-      sizes:
-        product.sizes && product.sizes.length > 0
-          ? product.sizes
-          : ["30ml", "50ml", "75ml", "100ml"],
+      sizes: productSizes,
+      sizesText: productSizes.join(", "),
     });
 
     setShowModal(true);
