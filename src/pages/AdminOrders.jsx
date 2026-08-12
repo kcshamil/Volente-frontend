@@ -7,6 +7,7 @@ import {
   LogOut,
   ExternalLink,
   Image,
+  MessageSquare,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -136,6 +137,12 @@ export default function AdminOrders() {
             className="flex items-center gap-3 p-3 bg-white/10 rounded-xl text-sm"
           >
             <ShoppingBag size={18} /> All Orders
+          </Link>
+          <Link
+            to="/admin/reviews"
+            className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm transition-colors"
+          >
+            <MessageSquare size={18} /> Manage Reviews
           </Link>
           <Link
             to="/admin/site-content"

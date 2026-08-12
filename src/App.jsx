@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
+import AdminReviews from "./pages/AdminReviews";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import AdminSiteContent from "./pages/AdminSiteContent";
@@ -76,6 +77,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute>
+              <AdminReviews />
             </ProtectedRoute>
           }
         />
