@@ -41,7 +41,17 @@ export default function AdminReviews() {
         return;
       }
 
-      const res = await axios.get(`${API_URL}/perfumes/admin/reviews`, getAuthConfig());
+      let res;
+      try {
+        res = await axios.get(`${API_URL}/admin/reviews`, getAuthConfig());
+      } catch (err) {
+        if (err.response?.status === 404) {
+          res = await axios.get(`${API_URL}/perfumes/admin/reviews`, getAuthConfig());
+        } else {
+          throw err;
+        }
+      }
+
       setReviews(res.data?.data || []);
     } catch (err) {
       console.error(err);
@@ -72,10 +82,23 @@ export default function AdminReviews() {
 
     try {
       setDeletingId(reviewId);
-      await axios.delete(
-        `${API_URL}/perfumes/${perfumeId}/reviews/${reviewId}`,
-        getAuthConfig()
-      );
+
+      try {
+        await axios.delete(
+          `${API_URL}/admin/reviews/${perfumeId}/${reviewId}`,
+          getAuthConfig()
+        );
+      } catch (err) {
+        if (err.response?.status === 404) {
+          await axios.delete(
+            `${API_URL}/perfumes/${perfumeId}/reviews/${reviewId}`,
+            getAuthConfig()
+          );
+        } else {
+          throw err;
+        }
+      }
+
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
       localStorage.removeItem("volente_perfumes");
     } catch (err) {
